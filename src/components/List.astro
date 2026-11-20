@@ -1,0 +1,38 @@
+---
+import type { Entry } from "../data/profile";
+
+interface Props {
+  id: string;
+  entries: Entry[];
+}
+const { id, entries } = Astro.props;
+---
+
+<section class="section" id={id} aria-labelledby={`${id}-h`}>
+  <h2 id={`${id}-h`}><span aria-hidden="true">*</span> {id}</h2>
+  <ul class="rows">
+    {
+      entries
+        .filter((e) => !e.cvOnly)
+        .map((e) => (
+          <li class="row">
+            <span class="row-date">{e.date}</span>
+            <div class="row-body">
+              <p class="row-head">
+                {e.href ? (
+                  <a href={e.href} target="_blank" rel="noopener">
+                    {e.title}
+                    <span class="arrow" aria-hidden="true">↗</span>
+                  </a>
+                ) : (
+                  <span class="row-title">{e.title}</span>
+                )}
+                {e.role && <span class="row-role">{e.role}</span>}
+              </p>
+              <p class="row-summary">{e.summary}</p>
+            </div>
+          </li>
+        ))
+    }
+  </ul>
+</section>

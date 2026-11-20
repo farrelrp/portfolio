@@ -1,0 +1,87 @@
+---
+import Base from "../layouts/Base.astro";
+import List from "../components/List.astro";
+import Cv from "../components/Cv.astro";
+import { profile, work, projects, awards, education } from "../data/profile";
+
+const year = new Date().getFullYear();
+---
+
+<Base egg>
+  <header class="bar">
+    <a class="bar-name" href="/">{profile.short}</a>
+    <div class="bar-right">
+      <span class="bar-clock" title="Time in Jakarta">jkt <span data-clock>--:--</span></span>
+      <button type="button" class="chip" data-action="cv" aria-pressed="false" title="Toggle CV view [c]">
+        <span class="when-site">cv</span><span class="when-cv">site</span>
+      </button>
+      <button type="button" class="chip chip-icon" data-action="theme" aria-label="Toggle theme" title="Toggle theme [t]">
+        <span class="theme-dot" aria-hidden="true"></span>
+      </button>
+    </div>
+  </header>
+
+  <main class="site">
+    <section class="hero">
+      <canvas data-duck data-src="/duck.png" aria-hidden="true"></canvas>
+      <div class="hero-text">
+        <p class="eyebrow">{profile.role}</p>
+        <h1>{profile.name}</h1>
+        <p class="lede">{profile.tagline}</p>
+        <nav class="pills" aria-label="Links">
+          {
+            profile.links.map((l) => (
+              <a class="pill" href={l.href} target={l.href.startsWith("http") ? "_blank" : undefined} rel="noopener">
+                {l.label}
+              </a>
+            ))
+          }
+          <button type="button" class="pill pill-solid" data-action="cv">view as cv</button>
+        </nav>
+      </div>
+      <p class="corner">{profile.location.toLowerCase()} <span aria-hidden="true">· scroll ↓</span></p>
+    </section>
+
+    <div class="column">
+      <section class="section" id="about" aria-labelledby="about-h">
+        <h2 id="about-h"><span aria-hidden="true">*</span> about</h2>
+        <p class="about">{profile.about}</p>
+      </section>
+
+      <List id="work" entries={work} />
+      <List id="projects" entries={projects} />
+      <List id="awards" entries={awards} />
+
+      <section class="section" id="education" aria-labelledby="education-h">
+        <h2 id="education-h"><span aria-hidden="true">*</span> education</h2>
+        <ul class="rows">
+          <li class="row">
+            <span class="row-date">{education.date}</span>
+            <div class="row-body">
+              <p class="row-head">
+                <span class="row-title">{education.school}</span>
+                <span class="row-role">{education.degree}</span>
+              </p>
+              <p class="row-summary">{education.notes.join(". ")}.</p>
+            </div>
+          </li>
+        </ul>
+      </section>
+
+      <section class="section contact" id="contact" aria-labelledby="contact-h">
+        <h2 id="contact-h"><span aria-hidden="true">*</span> contact</h2>
+        <p class="about">
+          Email is the fastest way to reach me.{" "}
+          <a href={`mailto:${profile.email}`}>{profile.email}</a>
+        </p>
+      </section>
+    </div>
+  </main>
+
+  <Cv />
+
+  <footer class="foot">
+    <span>© {year} {profile.name.toLowerCase()}</span>
+    <span class="foot-meta">viewport <span data-viewport></span> · [c] cv · [t] theme</span>
+  </footer>
+</Base>

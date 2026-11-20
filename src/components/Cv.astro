@@ -1,0 +1,120 @@
+---
+import { profile, work, projects, awards, education, skills } from "../data/profile";
+
+const cvProjects = projects.filter((p) =>
+  ["tofly.id", "ristek.link", "Antibiotic recommendation app", "PINK-MVAN", "Docusense"].includes(p.title),
+);
+---
+
+<article class="cv" aria-label="CV">
+  <div class="cv-tools">
+    <button type="button" class="pill" data-action="site">← back to site</button>
+    <button type="button" class="pill" data-action="print">print / save as pdf</button>
+  </div>
+
+  <div class="cv-sheet">
+    <header class="cv-head">
+      <h1>{profile.name}</h1>
+      <p>
+        {profile.location}
+        <span aria-hidden="true">·</span>
+        <a href={`mailto:${profile.email}`}>{profile.email}</a>
+        <span aria-hidden="true">·</span>
+        <a href="https://www.linkedin.com/in/farrel-reksa/">linkedin.com/in/farrel-reksa</a>
+        <span aria-hidden="true">·</span>
+        <a href="https://github.com/farrelrp">github.com/farrelrp</a>
+      </p>
+    </header>
+
+    <section>
+      <h2>Education</h2>
+      <div class="cv-item">
+        <div class="cv-line">
+          <p><strong>{education.school}</strong>, {education.degree}</p>
+          <span>{education.date}</span>
+        </div>
+        <ul>
+          {education.notes.map((n) => <li>{n}</li>)}
+        </ul>
+      </div>
+    </section>
+
+    <section>
+      <h2>Experience</h2>
+      {
+        work.map((w) => (
+          <div class="cv-item">
+            <div class="cv-line">
+              <p>
+                <strong>{w.role}</strong>, {w.title}
+              </p>
+              <span>{w.date.replace("now", "present")}</span>
+            </div>
+            {w.points ? (
+              <ul>
+                {w.points.map((p) => (
+                  <li>{p}</li>
+                ))}
+              </ul>
+            ) : (
+              <p class="cv-note">{w.summary}</p>
+            )}
+          </div>
+        ))
+      }
+    </section>
+
+    <section>
+      <h2>Projects</h2>
+      {
+        cvProjects.map((p) => (
+          <div class="cv-item">
+            <div class="cv-line">
+              <p>
+                <strong>{p.title}</strong>, {p.role}
+                {p.href && (
+                  <a class="cv-link" href={p.href}>
+                    {p.href.replace(/^https?:\/\//, "").replace(/\/$/, "")}
+                  </a>
+                )}
+              </p>
+              <span>{p.date}</span>
+            </div>
+            <p class="cv-note">{p.summary}</p>
+          </div>
+        ))
+      }
+    </section>
+
+    <section>
+      <h2>Awards</h2>
+      {
+        awards.map((a) => (
+          <div class="cv-item">
+            <div class="cv-line">
+              <p>
+                <strong>{a.title}</strong>, {a.role}
+              </p>
+              <span>{a.date}</span>
+            </div>
+            <p class="cv-note">{a.summary}</p>
+          </div>
+        ))
+      }
+    </section>
+
+    <section>
+      <h2>Skills</h2>
+      <dl class="cv-skills">
+        {
+          skills.map((s) => (
+            <>
+              <dt>{s.label}</dt>
+              <dd>{s.items}</dd>
+            </>
+          ))
+        }
+      </dl>
+    </section>
+  </div>
+</article>

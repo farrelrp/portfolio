@@ -1,0 +1,49 @@
+---
+import "@fontsource-variable/geist";
+import "@fontsource-variable/geist-mono";
+import "../styles/global.css";
+import { profile } from "../data/profile";
+
+interface Props {
+  title?: string;
+  description?: string;
+  egg?: boolean;
+}
+const {
+  title = profile.name,
+  description = `${profile.role}. ${profile.tagline}`,
+  egg = false,
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en" data-theme="dark" data-view="site">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#0a0a0a" />
+    <meta name="color-scheme" content="dark light" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <script is:inline>
+      (function () {
+        var d = document.documentElement;
+        try {
+          var t = localStorage.getItem("theme");
+          if (t === "light" || t === "dark") d.dataset.theme = t;
+        } catch (e) {}
+        if (location.hash === "#cv") d.dataset.view = "cv";
+      })();
+    </script>
+  </head>
+  <body data-egg={egg ? "" : undefined}>
+    <slot />
+    <script>
+      import "../scripts/ui";
+    </script>
+  </body>
+</html>
