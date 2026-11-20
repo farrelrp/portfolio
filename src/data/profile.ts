@@ -7,6 +7,9 @@ export const profile = {
   tagline: "Co-founder of Tofly. Final-year Information Systems student at Universitas Indonesia.",
   about:
     "I manage products and train models. Right now that means Tofly, a TOEFL prep platform for Indonesian learners. Before that I spent seven months on cloud and GPU products at Indosat, and two years running projects at RISTEK.",
+  first: "Farrel",
+  middle: "Reksa",
+  last: "Prawira",
   location: "South Jakarta, Indonesia",
   email: "farrelreksa@gmail.com",
   links: [
@@ -16,6 +19,15 @@ export const profile = {
   ],
 };
 
+/** Logos under the hero buttons. Each one jumps to the row with that id. */
+export const marks = [
+  { name: "Tofly", logo: "tofly.png", target: "tofly" },
+  { name: "Indosat Ooredoo Hutchison", logo: "indosat.png", target: "indosat" },
+  { name: "RISTEK Fasilkom UI", logo: "ristek.png", target: "ristek" },
+  { name: "Fasilkom UI", logo: "fasilkom-ui.png", target: "fasilkom-ui" },
+  { name: "GEMASTIK", logo: "gemastik.png", target: "gemastik" },
+];
+
 export type Entry = {
   title: string;
   role?: string;
@@ -24,14 +36,20 @@ export type Entry = {
   summary: string;
   /** Longer bullet points. Only the CV view shows these. */
   points?: string[];
+  /** Anchor id, so a logo elsewhere on the page can jump to this row. */
+  id?: string;
+  /** File in public/logos. Shown grey, in colour on hover. */
+  logo?: string;
   /** Hide from the site list, keep in the CV. */
   cvOnly?: boolean;
 };
 
 export const work: Entry[] = [
   {
+    id: "tofly",
+    logo: "tofly.png",
     title: "Tofly",
-    role: "Co-founder",
+    role: "Co-Founder",
     date: "Jun 2026 – now",
     href: "https://tofly.id",
     summary:
@@ -43,8 +61,10 @@ export const work: Entry[] = [
     ],
   },
   {
+    id: "indosat",
+    logo: "indosat.png",
     title: "Indosat Ooredoo Hutchison",
-    role: "Cloud product intern",
+    role: "AI Infrastructure Product Intern",
     date: "Apr – Oct 2026",
     summary:
       "Product planning for Cloudeka 2.0 with Lintasarta. GPU as a Service, GPU VDI, VMware migration and sovereign cloud.",
@@ -56,8 +76,10 @@ export const work: Entry[] = [
     ],
   },
   {
+    id: "ristek",
+    logo: "ristek.png",
     title: "RISTEK Fasilkom UI",
-    role: "Project manager",
+    role: "Project Manager",
     date: "Mar 2024 – Mar 2026",
     summary:
       "Head of product for ristek.link. Managed client and internal projects worth over 70M IDR.",
@@ -68,8 +90,9 @@ export const work: Entry[] = [
     ],
   },
   {
+    id: "share",
     title: "ShARE Universitas Indonesia",
-    role: "AI project specialist",
+    role: "AI Project Specialist",
     date: "Feb – Jul 2025",
     summary:
       "Consulting for an edtech client. Led the feature team that mapped where AI fits in their product.",
@@ -79,14 +102,18 @@ export const work: Entry[] = [
     ],
   },
   {
+    id: "fasilkom-ui",
+    logo: "fasilkom-ui.png",
     title: "Fasilkom UI",
-    role: "Teaching assistant",
+    role: "Teaching Assistant",
     date: "Jan – Jun 2025",
     summary: "Introduction to Computer Architecture.",
   },
   {
+    id: "aiesec",
+    logo: "aiesec.png",
     title: "AIESEC in UI",
-    role: "Project development",
+    role: "Project Development",
     date: "Feb 2024 – Feb 2025",
     summary:
       "Ran LeadTalk, a talk show with 8 speakers and 500+ attendees, and company visits to 3 global firms.",
@@ -100,56 +127,56 @@ export const work: Entry[] = [
 export const projects: Entry[] = [
   {
     title: "tofly.id",
-    role: "Co-founder",
+    role: "Co-Founder",
     date: "2026",
     href: "https://tofly.id",
     summary: "AI-assisted TOEFL, IELTS and TOEIC practice at a price Indonesian students can pay.",
   },
   {
     title: "Docusense",
-    role: "Hackathon build",
+    role: "Hackathon Build",
     date: "2026",
     summary:
       "Edge extension that helps visually impaired students read PDFs. It parses the layout and describes the figures.",
   },
   {
     title: "PINK-MVAN",
-    role: "Co-author",
+    role: "Co-Author",
     date: "2025",
     summary:
       "Multi-view mammography model for breast cancer risk. Distilled and quantized to 0.059 MB, 8× faster on CPU, 75.7% recall.",
   },
   {
     title: "ristek.link",
-    role: "Head of product",
+    role: "Head of Product",
     date: "2025",
     href: "https://ristek.link",
     summary: "Link shortener with custom domains and a QR creator. 4,000+ users.",
   },
   {
     title: "Antibiotic recommendation app",
-    role: "Project manager",
+    role: "Project Manager",
     date: "2024",
     summary:
       "Mobile app for the internal medicine department of a national hospital. Shipped in 3 months, used by 200+ staff.",
   },
   {
     title: "Microsleep detection",
-    role: "Group project",
+    role: "Group Project",
     date: "2024",
     href: "http://bit.ly/DrowsinessProject",
     summary: "YOLO on a Raspberry Pi that spots a driver nodding off and sounds an alert.",
   },
   {
     title: "Summer Event website",
-    role: "Project manager",
+    role: "Project Manager",
     date: "2024",
     href: "https://event.ristek.cs.ui.ac.id",
     summary: "Registration, forms and mailing for RISTEK's annual event.",
   },
   {
     title: "StudyTurtle",
-    role: "Personal project",
+    role: "Personal Project",
     date: "2024",
     href: "https://github.com/farrelrp/StudyTurtle/",
     summary: "Upload a PDF, get flashcards. Next.js, Firebase, Pinecone and an open-source LLM.",
@@ -159,19 +186,21 @@ export const projects: Entry[] = [
 export const awards: Entry[] = [
   {
     title: "Microsoft ASEAN AI for Accessibility Hackathon",
-    role: "2nd place, national",
+    role: "2nd Place, National",
     date: "Jun 2026",
     summary: "For Docusense.",
   },
   {
+    id: "gemastik",
+    logo: "gemastik.png",
     title: "GEMASTIK XVIII, ICT Scientific Paper",
-    role: "1st place, national",
+    role: "1st Place, National",
     date: "Oct 2025",
     summary: "For PINK-MVAN.",
   },
   {
     title: "Kominfo TSA Data Science Competition",
-    role: "1st place, national",
+    role: "1st Place, National",
     date: "Nov 2024",
     href: "http://ristek.link/SlidesTSA",
     summary:
@@ -179,13 +208,13 @@ export const awards: Entry[] = [
   },
   {
     title: "Sebelas Maret Statistics Data Science Competition",
-    role: "1st place, national",
+    role: "1st Place, National",
     date: "Nov 2024",
     summary: "Rainfall and power outage forecasting using lagged correlation.",
   },
   {
     title: "Telkom University Data Slayer 2.0",
-    role: "1st place and best presentation",
+    role: "1st Place and Best Presentation",
     date: "Jun 2024",
     summary: "Fall detection on video. 100% accuracy on the test set.",
   },

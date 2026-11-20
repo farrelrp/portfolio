@@ -15,10 +15,15 @@ const { id, entries } = Astro.props;
       entries
         .filter((e) => !e.cvOnly)
         .map((e) => (
-          <li class="row">
+          <li class="row" id={e.id}>
             <span class="row-date">{e.date}</span>
             <div class="row-body">
               <p class="row-head">
+                {e.logo ? (
+                  <img class="mark" src={`/logos/${e.logo}`} alt="" width="20" height="20" loading="lazy" />
+                ) : (
+                  id === "work" && <span class="mark mark-text" aria-hidden="true">{e.title[0]}</span>
+                )}
                 {e.href ? (
                   <a href={e.href} target="_blank" rel="noopener">
                     {e.title}

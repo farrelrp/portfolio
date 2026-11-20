@@ -2,7 +2,7 @@
 import Base from "../layouts/Base.astro";
 import List from "../components/List.astro";
 import Cv from "../components/Cv.astro";
-import { profile, work, projects, awards, education } from "../data/profile";
+import { profile, marks, work, projects, awards, education } from "../data/profile";
 
 const year = new Date().getFullYear();
 ---
@@ -26,18 +26,36 @@ const year = new Date().getFullYear();
       <canvas data-duck data-src="/duck.png" aria-hidden="true"></canvas>
       <div class="hero-text">
         <p class="eyebrow">{profile.role}</p>
-        <h1>{profile.name}</h1>
+        <h1 aria-label={profile.name}>
+          <span class="name-side">{profile.first}</span>
+          <span class="name-main">{profile.middle}</span>
+          <span class="name-side">{profile.last}</span>
+        </h1>
         <p class="lede">{profile.tagline}</p>
-        <nav class="pills" aria-label="Links">
+        <div class="actions">
+          <button type="button" class="cta" data-action="cv">view as cv</button>
+          <nav class="links" aria-label="Links">
+            {
+              profile.links.map((l) => (
+                <a href={l.href} target={l.href.startsWith("http") ? "_blank" : undefined} rel="noopener">
+                  {l.label}
+                  <span class="arrow" aria-hidden="true">↗</span>
+                </a>
+              ))
+            }
+          </nav>
+        </div>
+        <ul class="marks" aria-label="Places I have worked and won">
           {
-            profile.links.map((l) => (
-              <a class="pill" href={l.href} target={l.href.startsWith("http") ? "_blank" : undefined} rel="noopener">
-                {l.label}
-              </a>
+            marks.map((m) => (
+              <li>
+                <button type="button" data-jump={m.target} aria-label={`Jump to ${m.name}`} title={m.name}>
+                  <img class="mark" src={`/logos/${m.logo}`} alt="" width="26" height="26" />
+                </button>
+              </li>
             ))
           }
-          <button type="button" class="pill pill-solid" data-action="cv">view as cv</button>
-        </nav>
+        </ul>
       </div>
       <p class="corner">{profile.location.toLowerCase()} <span aria-hidden="true">· scroll ↓</span></p>
     </section>

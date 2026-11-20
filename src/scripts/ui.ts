@@ -48,9 +48,26 @@ document.addEventListener("click", (e) => {
   e.preventDefault();
 });
 
-window.addEventListener("hashchange", () =>
-  applyView(location.hash === "#cv" ? "cv" : "site"),
-);
+window.addEventListener("hashchange", () => {
+  const view = location.hash === "#cv" ? "cv" : "site";
+  if (root.dataset.view !== view) applyView(view);
+});
+
+// ---- logo -> row ------------------------------------------------------------
+function jumpTo(id: string) {
+  const row = document.getElementById(id);
+  if (!row) return;
+  const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  row.scrollIntoView({ block: "center", behavior: reduced ? "auto" : "smooth" });
+  row.classList.remove("flash");
+  void row.offsetWidth; // restart the animation if it is already running
+  row.classList.add("flash");
+  row.addEventListener("animationend", () => row.classList.remove("flash"), { once: true });
+}
+document.addEventListener("click", (e) => {
+  const el = (e.target as HTMLElement).closest<HTMLElement>("[data-jump]");
+  if (el?.dataset.jump) jumpTo(el.dataset.jump);
+});
 
 document.addEventListener("keydown", (e) => {
   if (e.metaKey || e.ctrlKey || e.altKey) return;

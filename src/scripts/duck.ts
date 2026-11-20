@@ -76,7 +76,7 @@ export async function mountDuck(canvas: HTMLCanvasElement) {
     canvas.height = H;
     image = ctx.createImageData(W, H);
     // Anchor the drawing to the bottom-right corner, where it bleeds off the edge.
-    size = Math.round(narrow ? Math.min(W * 1.02, H * 0.6) : Math.min(H * 1.02, W * 0.6));
+    size = Math.round(narrow ? Math.min(W * 1.02, H * 0.5) : Math.min(H * 1.02, W * 0.6));
     ox = W - size + Math.round(size * (narrow ? 0.04 : 0.02));
     oy = H - size;
   }
@@ -134,8 +134,8 @@ export async function mountDuck(canvas: HTMLCanvasElement) {
           const drift =
             0.5 + 0.5 * Math.sin(x * 0.045 + t * 0.5) * Math.sin(y * 0.06 - t * 0.35);
           let v = glow * (0.5 + 0.3 * drift);
+          // The pointer only lights the body, so it never dithers over the text.
           if (region === 128) v += 0.05 + light * 0.42;
-          else v += light * 0.16;
           if (v * glowIn > BAYER[(y & 7) * 8 + (x & 7)]) alpha = 120;
         }
 
