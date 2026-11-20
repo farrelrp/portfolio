@@ -1,8 +1,7 @@
 // Content for rrreksa.com/hi, the personal page. Images live in public/hi.
 
 export const hi = {
-  intro: "hi, i'm reksa.",
-  lede: "I build Tofly by day and read too much manga by night. This is the version of me that doesn't fit on LinkedIn.",
+  intro: "hi!",
   location: "south jakarta",
   links: [
     { label: "instagram", href: "https://www.instagram.com/reksafarrel/" },

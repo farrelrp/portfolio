@@ -20,11 +20,14 @@ const year = new Date().getFullYear();
 
   <main class="hi">
     <section class="hi-hero">
-      <canvas class="portrait" data-dither="/hi/portrait.png" data-gamma="0.9" aria-hidden="true"></canvas>
+      <img class="portrait" src="/hi/portrait.jpg" alt="Reksa leaning on a railing outside, city buildings behind" width="720" height="959" />
       <div class="hi-intro">
         <p class="eyebrow">{hi.location}</p>
         <h1>{hi.intro}</h1>
-        <p class="lede">{hi.lede}</p>
+        <p class="lede">
+          This is the part that won't fit on <a class="lede-link" href="/">the other page</a><span class="arrow lede-arrow" aria-hidden="true">↗</span>.
+          Here's what I've been into.
+        </p>
         <nav class="links" aria-label="Elsewhere">
           {
             hi.links.map((l) => (
