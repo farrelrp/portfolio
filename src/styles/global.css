@@ -810,6 +810,13 @@ button.badge:active {
   -webkit-tap-highlight-color: transparent;
   overflow: hidden;
 }
+/* clicking the game focuses it so Space works; that shouldn't draw a ring */
+.runner:focus {
+  outline: none;
+}
+.runner:focus-visible {
+  border-color: var(--muted);
+}
 .runner canvas {
   display: block;
   image-rendering: pixelated;
@@ -829,20 +836,41 @@ button.badge:active {
 .runner-hud [data-score] {
   color: var(--fg);
 }
-.runner-msg {
+.runner-over {
   position: absolute;
-  top: 0.6rem;
-  left: 0.85rem;
-  right: 7.5rem;
-  font-family: var(--mono);
-  font-size: 0.6875rem;
-  color: var(--muted);
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.9rem;
+  pointer-events: none;
+  color: var(--fg);
 }
-.runner-help {
-  margin-top: 0.6rem;
+.runner-final {
   font-family: var(--mono);
-  font-size: 0.6875rem;
-  color: var(--faint);
+  font-size: 2rem;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+.runner-over svg {
+  display: none;
+}
+.runner[data-state="idle"] .icon-play,
+.runner[data-state="dead"] .icon-retry {
+  display: block;
+}
+.runner[data-state="dead"] .runner-over,
+.runner[data-state="idle"] .runner-over {
+  background: color-mix(in srgb, var(--bg) 55%, transparent);
+}
+.runner[data-state="dead"] .runner-final {
+  animation: pop 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+@keyframes pop {
+  from {
+    transform: scale(0.85);
+    opacity: 0;
+  }
 }
 
 /* ---- small screens ------------------------------------------------------ */
@@ -876,14 +904,7 @@ button.badge:active {
   .shelf-by {
     font-size: 0.75rem;
   }
-  .runner-msg {
-    right: 0.85rem;
-    top: auto;
-    bottom: 0.4rem;
-  }
-  .runner {
-    padding-bottom: 1.6rem;
-  }
+
   .hero {
     align-items: flex-start;
     padding-top: calc(var(--bar) + 4svh);

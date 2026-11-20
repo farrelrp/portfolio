@@ -95,7 +95,17 @@ export function mountRunner(root: HTMLElement) {
   const ctx = canvas.getContext("2d")!;
   const scoreEl = root.querySelector<HTMLElement>("[data-score]")!;
   const bestEl = root.querySelector<HTMLElement>("[data-best]")!;
-  const msgEl = root.querySelector<HTMLElement>("[data-msg]")!;
+  const finalEl = root.querySelector<HTMLElement>("[data-final]")!;
+
+  // The overlay shows a play icon before the first run and the score plus a retry icon after a crash.
+  function setOverlay(mode: "idle" | "run" | "dead", score = 0) {
+    root.dataset.state = mode;
+    finalEl.textContent = mode === "dead" ? String(score) : "";
+    root.setAttribute(
+      "aria-label",
+      mode === "dead" ? `Score ${score}. Play again.` : mode === "idle" ? "Play duck" : "Duck, running",
+    );
+  }
 
   let W = 200;
   let scale = 3;
@@ -176,12 +186,12 @@ export function mountRunner(root: HTMLElement) {
     if (state === "idle") {
       state = "run";
       reset();
-      msgEl.textContent = "";
+      setOverlay("run");
     } else if (state === "dead") {
       if (performance.now() - deadAt < 350) return; // ignore the tap that killed you
       state = "run";
       reset();
-      msgEl.textContent = "";
+      setOverlay("run");
     }
     held = true;
     buffer = 0.12;
@@ -236,7 +246,7 @@ export function mountRunner(root: HTMLElement) {
               localStorage.setItem("runner-best", String(best));
             } catch {}
           }
-          msgEl.textContent = `tripped on a stack of manga · ${score} · tap to retry`;
+          setOverlay("dead", score);
           return;
         }
       }
@@ -354,5 +364,5 @@ export function mountRunner(root: HTMLElement) {
 
   readInk();
   resize();
-  msgEl.textContent = "tap or press space to play";
+  setOverlay("idle");
 }

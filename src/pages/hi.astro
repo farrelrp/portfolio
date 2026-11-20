@@ -6,7 +6,7 @@ import { hi, recommend, albums, manga, type Shelf } from "../data/hi";
 const year = new Date().getFullYear();
 ---
 
-<Base title="reksa" description="Albums, manga, a tiny game and whatever I'm recommending this week." egg>
+<Base title="reksa" description="Albums, manga, a duck game and whatever I'm recommending this week." egg>
   <header class="bar">
     <a class="bar-name" href="/hi">{profile.short}</a>
     <div class="bar-right">
@@ -92,16 +92,19 @@ const year = new Date().getFullYear();
     </section>
 
     <section class="section" aria-labelledby="game-h">
-      <h2 id="game-h"><span aria-hidden="true">*</span> a tiny game</h2>
-      <div class="runner" data-runner tabindex="0" role="button" aria-label="Play the runner game. Press space or tap to jump.">
+      <h2 id="game-h"><span aria-hidden="true">*</span> duck</h2>
+      <div class="runner" data-runner data-state="idle" tabindex="0" role="button" aria-label="Play duck">
         <div class="runner-hud" aria-hidden="true">
           <span data-best></span>
           <span data-score>00000</span>
         </div>
         <canvas></canvas>
-        <p class="runner-msg" data-msg aria-live="polite"></p>
+        <div class="runner-over" aria-hidden="true">
+          <span class="runner-final" data-final></span>
+          <svg class="icon-play" viewBox="0 0 24 24" width="28" height="28"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" /></svg>
+          <svg class="icon-retry" viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12a7.5 7.5 0 1 0 2.2-5.3" /><path d="M4 4.5v3.7h3.7" /></svg>
+        </div>
       </div>
-      <p class="runner-help">space, ↑ or tap to jump. hold for a higher jump.</p>
     </section>
 
     <section class="section" aria-labelledby="else-h">
