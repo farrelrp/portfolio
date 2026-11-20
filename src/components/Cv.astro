@@ -80,7 +80,10 @@ const cvProjects = projects.filter((p) =>
               </p>
               <span>{p.date}</span>
             </div>
-            <p class="cv-note">{p.summary}</p>
+            <p class="cv-note">
+              {p.summary}
+              {p.award && <span class="cv-award"> {p.award.label.replace(" · ", " Place, ")}.</span>}
+            </p>
           </div>
         ))
       }

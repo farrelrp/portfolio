@@ -40,6 +40,8 @@ export type Entry = {
   id?: string;
   /** File in public/logos. Shown grey, in colour on hover. */
   logo?: string;
+  /** Award this project won. `target` is the id of the award row. */
+  award?: { label: string; target: string };
   /** Hide from the site list, keep in the CV. */
   cvOnly?: boolean;
 };
@@ -135,6 +137,7 @@ export const projects: Entry[] = [
   {
     title: "Docusense",
     role: "Hackathon Build",
+    award: { label: "2nd · Microsoft AI for Accessibility", target: "microsoft-hackathon" },
     date: "2026",
     summary:
       "Edge extension that helps visually impaired students read PDFs. It parses the layout and describes the figures.",
@@ -142,6 +145,7 @@ export const projects: Entry[] = [
   {
     title: "PINK-MVAN",
     role: "Co-Author",
+    award: { label: "1st · GEMASTIK XVIII", target: "gemastik" },
     date: "2025",
     summary:
       "Multi-view mammography model for breast cancer risk. Distilled and quantized to 0.059 MB, 8× faster on CPU, 75.7% recall.",
@@ -163,6 +167,7 @@ export const projects: Entry[] = [
   {
     title: "Microsleep detection",
     role: "Group Project",
+    award: { label: "1st · Kominfo TSA", target: "kominfo-tsa" },
     date: "2024",
     href: "http://bit.ly/DrowsinessProject",
     summary: "YOLO on a Raspberry Pi that spots a driver nodding off and sounds an alert.",
@@ -185,6 +190,7 @@ export const projects: Entry[] = [
 
 export const awards: Entry[] = [
   {
+    id: "microsoft-hackathon",
     title: "Microsoft ASEAN AI for Accessibility Hackathon",
     role: "2nd Place, National",
     date: "Jun 2026",
@@ -199,6 +205,7 @@ export const awards: Entry[] = [
     summary: "For PINK-MVAN.",
   },
   {
+    id: "kominfo-tsa",
     title: "Kominfo TSA Data Science Competition",
     role: "1st Place, National",
     date: "Nov 2024",

@@ -442,6 +442,51 @@ button {
   font-size: 0.9375rem;
   text-wrap: pretty;
 }
+.award {
+  margin-top: 0.6rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-height: 1.6rem;
+  padding: 0 0.55rem;
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  font-family: var(--mono);
+  font-size: 0.6875rem;
+  color: var(--muted);
+  position: relative;
+  transition:
+    border-color 0.15s ease,
+    color 0.15s ease,
+    transform 0.12s ease;
+}
+/* 44px tap target without a taller badge */
+.award::after {
+  content: "";
+  position: absolute;
+  inset: -0.6rem 0;
+}
+.award:active {
+  transform: scale(0.97);
+}
+.award-star {
+  color: var(--fg);
+}
+.award-arrow {
+  transition: transform 0.18s ease;
+}
+@media (hover: hover) {
+  .award:hover {
+    border-color: var(--muted);
+    color: var(--fg);
+  }
+  .award:hover .award-arrow {
+    transform: translateY(2px);
+  }
+}
+.cv-award {
+  color: var(--fg);
+}
 .contact .about a {
   white-space: nowrap;
 }

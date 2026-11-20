@@ -35,6 +35,13 @@ const { id, entries } = Astro.props;
                 {e.role && <span class="row-role">{e.role}</span>}
               </p>
               <p class="row-summary">{e.summary}</p>
+              {e.award && (
+                <button type="button" class="award" data-jump={e.award.target} title="Jump to the award">
+                  <span class="award-star" aria-hidden="true">*</span>
+                  {e.award.label}
+                  <span class="award-arrow" aria-hidden="true">↓</span>
+                </button>
+              )}
             </div>
           </li>
         ))
