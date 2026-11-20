@@ -82,7 +82,9 @@ const cvProjects = projects.filter((p) =>
             </div>
             <p class="cv-note">
               {p.summary}
-              {p.award && <span class="cv-award"> {p.award.label.replace(" · ", " Place, ")}.</span>}
+              {p.badges
+                ?.filter((bd) => bd.kind === "award")
+                .map((bd) => <span class="cv-award"> {bd.label.replace(" · ", " Place, ")}.</span>)}
             </p>
           </div>
         ))

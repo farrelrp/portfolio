@@ -442,8 +442,13 @@ button {
   font-size: 0.9375rem;
   text-wrap: pretty;
 }
-.award {
+.badges {
   margin-top: 0.6rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+.badge {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
@@ -453,6 +458,7 @@ button {
   border-radius: 4px;
   font-family: var(--mono);
   font-size: 0.6875rem;
+  line-height: 1.3;
   color: var(--muted);
   position: relative;
   transition:
@@ -460,28 +466,41 @@ button {
     color 0.15s ease,
     transform 0.12s ease;
 }
-/* 44px tap target without a taller badge */
-.award::after {
+/* awards read first: brighter text */
+.badge-award {
+  color: var(--fg);
+}
+/* programs are memberships, not wins: no border, just a dot */
+.badge-program {
+  border-color: transparent;
+  padding: 0 0.3rem;
+}
+.badge-program::before {
+  content: "";
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--faint);
+}
+button.badge::after {
   content: "";
   position: absolute;
   inset: -0.6rem 0;
 }
-.award:active {
+button.badge:active {
   transform: scale(0.97);
 }
-.award-star {
-  color: var(--fg);
-}
-.award-arrow {
+.badge-arrow {
+  color: var(--muted);
   transition: transform 0.18s ease;
 }
 @media (hover: hover) {
-  .award:hover {
+  button.badge:hover {
     border-color: var(--muted);
-    color: var(--fg);
   }
-  .award:hover .award-arrow {
+  button.badge:hover .badge-arrow {
     transform: translateY(2px);
+    color: var(--fg);
   }
 }
 .cv-award {

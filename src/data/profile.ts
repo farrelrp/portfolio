@@ -28,6 +28,13 @@ export const marks = [
   { name: "GEMASTIK", logo: "gemastik.png", target: "gemastik" },
 ];
 
+export type Badge = {
+  kind: "award" | "funding" | "program";
+  label: string;
+  /** Id of the row to jump to. */
+  target?: string;
+};
+
 export type Entry = {
   title: string;
   role?: string;
@@ -40,8 +47,11 @@ export type Entry = {
   id?: string;
   /** File in public/logos. Shown grey, in colour on hover. */
   logo?: string;
-  /** Award this project won. `target` is the id of the award row. */
-  award?: { label: string; target: string };
+  /**
+   * Small chips under the summary. An award with a `target` jumps to that
+   * award row. Funding and programs are plain labels.
+   */
+  badges?: Badge[];
   /** Hide from the site list, keep in the CV. */
   cvOnly?: boolean;
 };
@@ -56,9 +66,18 @@ export const work: Entry[] = [
     href: "https://tofly.id",
     summary:
       "English test prep for Indonesian learners. I work on product, partnerships and growth.",
+    badges: [
+      { kind: "award", label: "1st · KMI Expo 2026", target: "kmi-expo" },
+      { kind: "funding", label: "Funded by Kemdiktisaintek (P2MW)" },
+      { kind: "program", label: "NVIDIA Inception" },
+      { kind: "program", label: "Google for Startups" },
+      { kind: "program", label: "Claude for Startups" },
+    ],
     points: [
       "Co-founded tofly.id, a TOEFL, IELTS and TOEIC practice platform priced for Indonesian students.",
-      "Received bootstrap funding from the Ministry of Higher Education, Science, and Technology.",
+      "Funded through P2MW by the Ministry of Higher Education, Science, and Technology (Kemdiktisaintek).",
+      "Won 1st Place in the Bisnis Digital Berkembang (growing digital business) category at KMI Expo 2026.",
+      "Accepted into NVIDIA Inception, Google for Startups and Claude for Startups.",
       "Own product strategy, business development, partnerships and growth.",
     ],
   },
@@ -132,12 +151,13 @@ export const projects: Entry[] = [
     role: "Co-Founder",
     date: "2026",
     href: "https://tofly.id",
+    badges: [{ kind: "award", label: "1st · KMI Expo 2026", target: "kmi-expo" }],
     summary: "AI-assisted TOEFL, IELTS and TOEIC practice at a price Indonesian students can pay.",
   },
   {
     title: "Docusense",
     role: "Hackathon Build",
-    award: { label: "2nd · Microsoft AI for Accessibility", target: "microsoft-hackathon" },
+    badges: [{ kind: "award", label: "2nd · Microsoft AI for Accessibility", target: "microsoft-hackathon" }],
     date: "2026",
     summary:
       "Edge extension that helps visually impaired students read PDFs. It parses the layout and describes the figures.",
@@ -145,7 +165,7 @@ export const projects: Entry[] = [
   {
     title: "PINK-MVAN",
     role: "Co-Author",
-    award: { label: "1st · GEMASTIK XVIII", target: "gemastik" },
+    badges: [{ kind: "award", label: "1st · GEMASTIK XVIII", target: "gemastik" }],
     date: "2025",
     summary:
       "Multi-view mammography model for breast cancer risk. Distilled and quantized to 0.059 MB, 8× faster on CPU, 75.7% recall.",
@@ -167,7 +187,7 @@ export const projects: Entry[] = [
   {
     title: "Microsleep detection",
     role: "Group Project",
-    award: { label: "1st · Kominfo TSA", target: "kominfo-tsa" },
+    badges: [{ kind: "award", label: "1st · Kominfo TSA", target: "kominfo-tsa" }],
     date: "2024",
     href: "http://bit.ly/DrowsinessProject",
     summary: "YOLO on a Raspberry Pi that spots a driver nodding off and sounds an alert.",
@@ -189,6 +209,14 @@ export const projects: Entry[] = [
 ];
 
 export const awards: Entry[] = [
+  {
+    id: "kmi-expo",
+    logo: "tofly.png",
+    title: "KMI Expo 2026, Bisnis Digital Berkembang",
+    role: "1st Place, National",
+    date: "Oct 2026",
+    summary: "For Tofly. The final stage of P2MW, Kemdiktisaintek's student business program.",
+  },
   {
     id: "microsoft-hackathon",
     title: "Microsoft ASEAN AI for Accessibility Hackathon",

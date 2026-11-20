@@ -35,12 +35,25 @@ const { id, entries } = Astro.props;
                 {e.role && <span class="row-role">{e.role}</span>}
               </p>
               <p class="row-summary">{e.summary}</p>
-              {e.award && (
-                <button type="button" class="award" data-jump={e.award.target} title="Jump to the award">
-                  <span class="award-star" aria-hidden="true">*</span>
-                  {e.award.label}
-                  <span class="award-arrow" aria-hidden="true">↓</span>
-                </button>
+              {e.badges && (
+                <ul class="badges">
+                  {e.badges.map((bd) => (
+                    <li>
+                      {bd.target ? (
+                        <button type="button" class={`badge badge-${bd.kind}`} data-jump={bd.target} title="Jump to the award">
+                          <span class="badge-star" aria-hidden="true">*</span>
+                          {bd.label}
+                          <span class="badge-arrow" aria-hidden="true">↓</span>
+                        </button>
+                      ) : (
+                        <span class={`badge badge-${bd.kind}`}>
+                          {bd.kind === "award" && <span class="badge-star" aria-hidden="true">*</span>}
+                          {bd.label}
+                        </span>
+                      )}
+                    </li>
+                  ))}
+                </ul>
               )}
             </div>
           </li>
