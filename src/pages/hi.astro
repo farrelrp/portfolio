@@ -8,10 +8,16 @@ const year = new Date().getFullYear();
 
 <Base title="reksa" description="Albums, manga, a duck game and whatever I'm recommending this week." egg>
   <header class="bar">
-    <a class="bar-name" href="/hi">{profile.short}</a>
+    <div class="bar-left">
+      <a class="bar-name" href="/hi">{profile.short}</a>
+      <nav class="bar-switch" aria-label="Pages">
+        <a href="/">work</a>
+        <span aria-hidden="true">/</span>
+        <a aria-current="page" href="/hi">me</a>
+      </nav>
+    </div>
     <div class="bar-right">
       <span class="bar-clock" title="Time in Jakarta">jkt <span data-clock>--:--</span></span>
-      <a class="chip" href="/" title="The work version">work</a>
       <button type="button" class="chip chip-icon" data-action="theme" aria-label="Toggle theme" title="Toggle theme [t]">
         <span class="theme-dot" aria-hidden="true"></span>
       </button>

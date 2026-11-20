@@ -101,6 +101,37 @@ button {
   text-decoration: none;
   letter-spacing: 0.02em;
 }
+.bar-left {
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+}
+.bar-switch {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--faint);
+}
+.bar-switch a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem; /* tap target; the bar is 3rem tall */
+  padding: 0 0.1rem;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+.bar-switch a[aria-current="page"] {
+  color: var(--fg);
+  text-decoration: underline;
+  text-decoration-color: var(--faint);
+  text-underline-offset: 0.3em;
+}
+@media (hover: hover) {
+  .bar-switch a:hover {
+    color: var(--fg);
+  }
+}
 .bar-right {
   display: flex;
   align-items: center;
