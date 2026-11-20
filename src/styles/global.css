@@ -368,10 +368,15 @@ button {
 }
 .section h2 {
   font-family: var(--mono);
-  font-size: 0.8125rem;
-  font-weight: 400;
-  color: var(--muted);
-  margin-bottom: 1.25rem;
+  font-size: 1.25rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--fg);
+  margin-bottom: 1.5rem;
+}
+.section h2 > span[aria-hidden] {
+  color: var(--faint);
+  margin-right: 0.15em;
 }
 .about {
   font-size: 1.125rem;
@@ -641,8 +646,231 @@ button.badge:active {
   color: var(--muted);
 }
 
+/* ---- personal page (/hi) ------------------------------------------------ */
+.hi {
+  max-width: 44rem;
+  margin: 0 auto;
+  padding: calc(var(--bar) + 3rem) var(--gutter) 4rem;
+}
+.hi-hero {
+  display: grid;
+  grid-template-columns: 11rem 1fr;
+  gap: 2.25rem;
+  align-items: end;
+}
+.portrait {
+  width: 100%;
+  aspect-ratio: 289 / 450;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+.hi-intro h1 {
+  font-size: clamp(2.5rem, 7vw, 4rem);
+  font-weight: 500;
+  letter-spacing: -0.045em;
+  line-height: 1;
+}
+.hi-intro .lede {
+  margin-top: 1rem;
+}
+.hi-intro .links {
+  margin-top: 1.25rem;
+  font-family: var(--mono);
+  font-size: 0.8125rem;
+}
+
+.cover {
+  position: relative;
+  margin: 0;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border-radius: 2px;
+  outline-offset: 3px;
+}
+.cover-tall {
+  aspect-ratio: 2 / 3;
+}
+.cover canvas,
+.cover img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.cover canvas {
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+.cover img {
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+.cover.on img,
+.cover:focus-visible img {
+  opacity: 1;
+}
+@media (hover: hover) {
+  .cover:hover img,
+  .rec:hover .cover img,
+  .shelf-link:hover .cover img {
+    opacity: 1;
+  }
+}
+
+.rec {
+  display: grid;
+  grid-template-columns: 8.5rem 1fr;
+  gap: 1.25rem;
+  align-items: center;
+  text-decoration: none;
+  padding: 0.75rem;
+  margin: 0 -0.75rem;
+  border-radius: 6px;
+  transition: background-color 0.2s ease;
+}
+.rec-kind {
+  font-family: var(--mono);
+  font-size: 0.6875rem;
+  color: var(--muted);
+}
+.rec-title {
+  margin-top: 0.35rem;
+  font-size: 1.5rem;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+}
+.rec-by {
+  color: var(--muted);
+}
+.rec-cta {
+  margin-top: 0.75rem;
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+@media (hover: hover) {
+  .rec:hover {
+    background: color-mix(in srgb, var(--fg) 5%, transparent);
+  }
+  .rec:hover .arrow {
+    transform: translate(2px, -2px);
+    color: var(--fg);
+  }
+}
+
+.shelf {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem 1rem;
+}
+.shelf-manga {
+  grid-template-columns: repeat(4, 1fr);
+}
+.shelf-title {
+  margin-top: 0.55rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.3;
+}
+.shelf-by {
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+.shelf-link {
+  display: block;
+  text-decoration: none;
+}
+
+.runner {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  padding: 1.75rem 0 0.75rem;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  overflow: hidden;
+}
+.runner canvas {
+  display: block;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+.runner-hud {
+  position: absolute;
+  top: 0.6rem;
+  right: 0.85rem;
+  display: flex;
+  gap: 1rem;
+  font-family: var(--mono);
+  font-size: 0.6875rem;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+.runner-hud [data-score] {
+  color: var(--fg);
+}
+.runner-msg {
+  position: absolute;
+  top: 0.6rem;
+  left: 0.85rem;
+  right: 7.5rem;
+  font-family: var(--mono);
+  font-size: 0.6875rem;
+  color: var(--muted);
+}
+.runner-help {
+  margin-top: 0.6rem;
+  font-family: var(--mono);
+  font-size: 0.6875rem;
+  color: var(--faint);
+}
+
 /* ---- small screens ------------------------------------------------------ */
 @media (max-width: 720px) {
+  .hi {
+    padding-top: calc(var(--bar) + 1.5rem);
+  }
+  .hi-hero {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  .portrait {
+    width: 9rem;
+  }
+  .rec {
+    grid-template-columns: 6.5rem 1fr;
+    gap: 1rem;
+  }
+  .rec-title {
+    font-size: 1.25rem;
+  }
+  .shelf {
+    gap: 1.25rem 0.75rem;
+  }
+  .shelf-manga {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .shelf-title {
+    font-size: 0.8125rem;
+  }
+  .shelf-by {
+    font-size: 0.75rem;
+  }
+  .runner-msg {
+    right: 0.85rem;
+    top: auto;
+    bottom: 0.4rem;
+  }
+  .runner {
+    padding-bottom: 1.6rem;
+  }
   .hero {
     align-items: flex-start;
     padding-top: calc(var(--bar) + 4svh);

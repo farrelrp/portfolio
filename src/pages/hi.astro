@@ -1,0 +1,125 @@
+---
+import Base from "../layouts/Base.astro";
+import { profile } from "../data/profile";
+import { hi, recommend, albums, manga, type Shelf } from "../data/hi";
+
+const year = new Date().getFullYear();
+---
+
+<Base title="reksa" description="Albums, manga, a tiny game and whatever I'm recommending this week." egg>
+  <header class="bar">
+    <a class="bar-name" href="/hi">{profile.short}</a>
+    <div class="bar-right">
+      <span class="bar-clock" title="Time in Jakarta">jkt <span data-clock>--:--</span></span>
+      <a class="chip" href="/" title="The work version">work</a>
+      <button type="button" class="chip chip-icon" data-action="theme" aria-label="Toggle theme" title="Toggle theme [t]">
+        <span class="theme-dot" aria-hidden="true"></span>
+      </button>
+    </div>
+  </header>
+
+  <main class="hi">
+    <section class="hi-hero">
+      <canvas class="portrait" data-dither="/hi/portrait.png" data-gamma="0.9" aria-hidden="true"></canvas>
+      <div class="hi-intro">
+        <p class="eyebrow">{hi.location}</p>
+        <h1>{hi.intro}</h1>
+        <p class="lede">{hi.lede}</p>
+        <nav class="links" aria-label="Elsewhere">
+          {
+            hi.links.map((l) => (
+              <a href={l.href} target={l.href.startsWith("http") ? "_blank" : undefined} rel="noopener">
+                {l.label}
+                <span class="arrow" aria-hidden="true">↗</span>
+              </a>
+            ))
+          }
+        </nav>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="rec-h">
+      <h2 id="rec-h"><span aria-hidden="true">*</span> recommending right now</h2>
+      <a class="rec" href={recommend.href} target="_blank" rel="noopener">
+        <figure class="cover rec-cover" data-reveal>
+          <canvas data-dither={recommend.cover} aria-hidden="true"></canvas>
+          <img src={recommend.cover} alt={`${recommend.from} cover`} loading="lazy" />
+        </figure>
+        <div class="rec-body">
+          <p class="rec-kind">{recommend.kind}</p>
+          <p class="rec-title">{recommend.title}</p>
+          <p class="rec-by">{recommend.by}</p>
+          <p class="rec-cta">{recommend.cta} <span class="arrow" aria-hidden="true">↗</span></p>
+        </div>
+      </a>
+    </section>
+
+    <section class="section" aria-labelledby="albums-h">
+      <h2 id="albums-h"><span aria-hidden="true">*</span> albums</h2>
+      <ul class="shelf shelf-albums">
+        {albums.map((a: Shelf) => (
+          <li>
+            <figure class="cover" data-reveal tabindex="0">
+              <canvas data-dither={a.cover} aria-hidden="true"></canvas>
+              <img src={a.cover} alt="" loading="lazy" />
+            </figure>
+            <p class="shelf-title">{a.title}</p>
+            <p class="shelf-by">{a.by}</p>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section class="section" aria-labelledby="manga-h">
+      <h2 id="manga-h"><span aria-hidden="true">*</span> manga</h2>
+      <ul class="shelf shelf-manga">
+        {manga.map((m: Shelf) => (
+          <li>
+            <a href={m.href} target="_blank" rel="noopener" class="shelf-link">
+              <figure class="cover cover-tall">
+                <canvas data-dither={m.cover} aria-hidden="true"></canvas>
+                <img src={m.cover} alt="" loading="lazy" />
+              </figure>
+              <p class="shelf-title">{m.title}</p>
+              <p class="shelf-by">{m.by}</p>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section class="section" aria-labelledby="game-h">
+      <h2 id="game-h"><span aria-hidden="true">*</span> a tiny game</h2>
+      <div class="runner" data-runner tabindex="0" role="button" aria-label="Play the runner game. Press space or tap to jump.">
+        <div class="runner-hud" aria-hidden="true">
+          <span data-best></span>
+          <span data-score>00000</span>
+        </div>
+        <canvas></canvas>
+        <p class="runner-msg" data-msg aria-live="polite"></p>
+      </div>
+      <p class="runner-help">space, ↑ or tap to jump. hold for a higher jump.</p>
+    </section>
+
+    <section class="section" aria-labelledby="else-h">
+      <h2 id="else-h"><span aria-hidden="true">*</span> elsewhere</h2>
+      <p class="about">
+        Looking for the serious version? That's at <a href="/">rrreksa.com</a>, with the CV.
+      </p>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <span>© {year} reksa</span>
+    <span class="foot-meta">[t] theme</span>
+  </footer>
+</Base>
+
+<script>
+  import { mountDither } from "../scripts/dither";
+  import { mountRunner } from "../scripts/runner";
+
+  mountDither();
+  const game = document.querySelector<HTMLElement>("[data-runner]");
+  if (game) mountRunner(game);
+</script>

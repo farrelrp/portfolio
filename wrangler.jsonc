@@ -2,6 +2,8 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "reksa-portfolio",
   "compatibility_date": "2026-11-01",
+  // Needs the rrreksa.com zone in the same Cloudflare account. Deploy creates the DNS record.
+  "routes": [{ "pattern": "rrreksa.com", "custom_domain": true }],
   "assets": {
     "directory": "./dist",
     "not_found_handling": "404-page"
