@@ -1,6 +1,122 @@
 ---
-// "The bitter lesson": a short idea with a chart, between the hero and the
-// rest of the page. The chart is drawn by src/scripts/bitter.ts.
+// "The bitter lesson": a short idea paired with the historical pattern
+// (chess, speech, vision, Go -> now). Dithered bars are drawn by src/scripts/bitter.ts.
+
+const ICONS: Record<string, string> = {
+  chess: `
+....###....
+...#####...
+..##.#.##..
+.########..
+..####.##..
+....####...
+...#####...
+..#######..
+..#######..
+.#########.
+.#########.`,
+  speech: `
+.....#.....
+.....#.....
+...#.#.#...
+...#.#.#...
+.#.#.#.#.#.
+.#.#.#.#.#.
+.#.#.#.#.#.
+...#.#.#...
+...#.#.#...
+.....#.....
+.....#.....`,
+  vision: `
+...........
+...........
+...#####...
+..##...##..
+.##.###.##.
+##.##.##.##
+.##.###.##.
+..##...##..
+...#####...
+...........
+...........`,
+  go: `
+..#.....#..
+.###...#.#.
+#####.#...#
+.###...#.#.
+..#.....#..
+...........
+..#.....#..
+.#.#...###.
+#...#.#####
+.#.#...###.
+..#.....#..`,
+  now: `
+.....#.....
+.....#.....
+....###....
+...#####...
+..#######..
+###########
+..#######..
+...#####...
+....###....
+.....#.....
+.....#.....`,
+};
+
+function gridToPath(raw: string) {
+  const lines = raw.trim().split("\n");
+  let d = "";
+  lines.forEach((row, y) => {
+    for (const m of row.matchAll(/#+/g)) d += `M${m.index} ${y}h${m[0].length}v1h-${m[0].length}z`;
+  });
+  return d;
+}
+
+const eras = [
+  {
+    icon: "chess",
+    year: "1997",
+    field: "chess",
+    old: "grandmaster rules & opening books",
+    won: "deep search",
+    scale: 16,
+  },
+  {
+    icon: "speech",
+    year: "2010s",
+    field: "speech",
+    old: "phoneme & acoustic grammars",
+    won: "end-to-end nets",
+    scale: 34,
+  },
+  {
+    icon: "vision",
+    year: "2012",
+    field: "vision",
+    old: "hand-crafted edge detectors",
+    won: "convnets on gpus",
+    scale: 56,
+  },
+  {
+    icon: "go",
+    year: "2017",
+    field: "go",
+    old: "centuries of human strategy",
+    won: "self-play + search",
+    scale: 78,
+  },
+  {
+    icon: "now",
+    year: "now",
+    field: "products",
+    old: "prompt hacks & model workarounds",
+    won: "systems that scale",
+    scale: 100,
+    current: true,
+  },
+];
 ---
 
 <section class="bitter" id="bitter" aria-labelledby="bitter-h" data-bitter>
@@ -21,23 +137,44 @@
     </p>
   </div>
 
-  <figure class="bitter-figure">
-    <p class="bitter-y" aria-hidden="true">how well it works</p>
-    <div class="bitter-stage">
-      <canvas
-        role="img"
-        aria-label="A chart. Knowledge built in by hand rises quickly and levels off. A general method that scales with compute starts lower, crosses it, and keeps rising."
-      ></canvas>
-      <span class="bitter-label" data-label="hand" aria-hidden="true">built by hand</span>
-      <span class="bitter-label" data-label="general" aria-hidden="true">learning + search</span>
-      <span class="bitter-label" data-label="cross" aria-hidden="true">crossover</span>
-    </div>
-    <label class="bitter-x">
-      <span>compute</span>
-      <input type="range" min="0" max="1000" value="0" />
-      <span aria-hidden="true">→</span>
-    </label>
-    <p class="bitter-caption" data-caption></p>
+  <figure
+    class="bitter-figure"
+    aria-label="Five eras of The Bitter Lesson: hand-crafted rules repeatedly replaced by general methods as compute scales."
+  >
+    <ol class="bitter-list">
+      {
+        eras.map((e) => (
+          <li class:list={["bitter-row", { "bitter-now": e.current }]}>
+            <div class="bitter-meta">
+              <svg
+                class="bitter-icon"
+                viewBox="0 0 11 11"
+                width="14"
+                height="14"
+                shape-rendering="crispEdges"
+                aria-hidden="true"
+              >
+                <path fill="currentColor" d={gridToPath(ICONS[e.icon])} />
+              </svg>
+              <span class="bitter-field">{e.field}</span>
+              <span class="bitter-year">{e.year}</span>
+            </div>
+
+            <div class="bitter-shift">
+              <span class="bitter-old">{e.old}</span>
+              <span class="bitter-arrow" aria-hidden="true">→</span>
+              <span class="bitter-won">{e.won}</span>
+            </div>
+
+            <div class="bitter-bar-wrap" aria-hidden="true">
+              <div class="bitter-bar" style={`width: ${e.scale}%`}>
+                <canvas data-bar data-w={Math.max(24, Math.round(e.scale * 1.4))} data-h="5"></canvas>
+              </div>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
   </figure>
 </section>
 
@@ -92,116 +229,89 @@
   .bitter-figure {
     margin: 0;
   }
-  .bitter-y {
-    margin-bottom: 0.5rem;
-    font-family: var(--mono);
-    font-size: 0.75rem;
-    color: var(--muted);
-  }
-  .bitter-stage {
-    position: relative;
-  }
-  canvas {
-    display: block;
-    width: 100%;
-    aspect-ratio: 220 / 120;
-    image-rendering: pixelated;
-    image-rendering: crisp-edges;
-  }
-  .bitter-label {
-    position: absolute;
-    padding: 0.1rem 0.35rem;
-    border-radius: 3px;
-    background: var(--bg);
-    font-family: var(--mono);
-    font-size: 0.75rem;
-    line-height: 1.3;
-    white-space: nowrap;
-    color: var(--fg);
-    pointer-events: none;
-    transition: opacity 0.3s ease;
-  }
-  .bitter-label[data-side="above"] {
-    margin-top: -1.65rem;
-  }
-  .bitter-label[data-side="below"] {
-    margin-top: 0.5rem;
-  }
-  .bitter-label[data-label="hand"] {
-    color: var(--muted);
-  }
-  .bitter-label[data-label="cross"] {
-    translate: -50% 0;
-    margin: 0.6rem 0 0;
+  .bitter-list {
+    margin: 0;
     padding: 0;
-    background: none;
-    font-size: 0.6875rem;
-    color: var(--muted);
+    list-style: none;
   }
-
-  .bitter-x {
-    margin-top: 2rem;
+  .bitter-row {
+    padding: 0.9rem 0;
+    border-top: 1px solid var(--rule);
+    display: grid;
+    grid-template-columns: 7.5rem minmax(0, 1fr);
+    gap: 0.45rem 1rem;
+    align-items: baseline;
+  }
+  .bitter-row:first-child {
+    border-top: 0;
+    padding-top: 0;
+  }
+  .bitter-now {
+    border-top-color: var(--border);
+    padding: 0.95rem 0.75rem;
+    margin: 0.15rem -0.75rem 0;
+    background: color-mix(in srgb, var(--fg) 4%, transparent);
+    border-radius: 4px;
+  }
+  .bitter-meta {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: 0.45rem;
     font-family: var(--mono);
     font-size: 0.75rem;
+  }
+  .bitter-icon {
+    flex: none;
     color: var(--muted);
   }
-  input[type="range"] {
-    flex: 1;
-    height: 2.75rem;
-    margin: 0;
-    background: none;
-    appearance: none;
-    -webkit-appearance: none;
-    cursor: pointer;
-  }
-  input[type="range"]::-webkit-slider-runnable-track {
-    height: 2px;
-    background: var(--border);
-  }
-  input[type="range"]::-moz-range-track {
-    height: 2px;
-    background: var(--border);
-  }
-  input[type="range"]::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    width: 14px;
-    height: 14px;
-    margin-top: -6px;
-    border-radius: 50%;
-    background: var(--fg);
-    border: 0;
-    transition: transform 0.12s ease;
-  }
-  input[type="range"]::-moz-range-thumb {
-    width: 14px;
-    height: 14px;
-    border-radius: 50%;
-    background: var(--fg);
-    border: 0;
-  }
-  input[type="range"]:active::-webkit-slider-thumb {
-    transform: scale(1.2);
-  }
-  input[type="range"]:focus-visible {
-    outline: none;
-  }
-  input[type="range"]:focus-visible::-webkit-slider-thumb {
-    outline: 2px solid var(--fg);
-    outline-offset: 3px;
-  }
-  input[type="range"]:focus-visible::-moz-range-thumb {
-    outline: 2px solid var(--fg);
-    outline-offset: 3px;
-  }
-  .bitter-caption {
-    min-height: 1.6em;
-    margin-top: 0.25rem;
-    font-size: 1rem;
+  .bitter-now .bitter-icon {
     color: var(--fg);
-    text-wrap: pretty;
+  }
+  .bitter-field {
+    color: var(--fg);
+    font-weight: 500;
+  }
+  .bitter-year {
+    color: var(--faint);
+    font-variant-numeric: tabular-nums;
+  }
+  .bitter-shift {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.25rem 0.5rem;
+    font-size: 0.9375rem;
+    line-height: 1.4;
+  }
+  .bitter-old {
+    color: var(--muted);
+    text-decoration: line-through;
+    text-decoration-color: var(--faint);
+  }
+  .bitter-arrow {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    color: var(--faint);
+  }
+  .bitter-won {
+    color: var(--fg);
+    font-weight: 500;
+  }
+  .bitter-bar-wrap {
+    grid-column: 2;
+    height: 5px;
+    background: var(--rule);
+    overflow: hidden;
+  }
+  .bitter-bar {
+    height: 100%;
+  }
+  .bitter-bar canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
   }
 
   @media (max-width: 859px) {
@@ -210,8 +320,14 @@
       gap: 2.75rem;
       padding-top: 5rem;
     }
-    .bitter-caption {
-      min-height: 3.2em;
+  }
+  @media (max-width: 560px) {
+    .bitter-row {
+      grid-template-columns: 1fr;
+      gap: 0.35rem;
+    }
+    .bitter-bar-wrap {
+      grid-column: 1;
     }
   }
 </style>

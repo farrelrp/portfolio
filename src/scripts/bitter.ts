@@ -1,12 +1,4 @@
-// "The bitter lesson" chart, between the hero and the rest of the page.
-// Two curves on a 1-bit canvas: knowledge built in by hand climbs fast and
-// levels off; a general method that scales with compute starts lower, passes
-// it and keeps going. It draws itself once when it scrolls into view, then
-// the slider takes over.
-
-const WW = 220;
-const WH = 120;
-const AX = { x0: 6, x1: 214, y0: 18, y1: 112 }; // plot area, in canvas pixels
+// 1-bit Bayer-dithered compute bars for the Bitter Lesson eras in Bitter.astro.
 
 const BAYER = [
   0, 32, 8, 40, 2, 34, 10, 42, 48, 16, 56, 24, 50, 18, 58, 26, 12, 44, 4, 36, 14, 46, 6, 38, 60,
@@ -14,176 +6,46 @@ const BAYER = [
   7, 39, 13, 45, 5, 37, 63, 31, 55, 23, 61, 29, 53, 21,
 ].map((v) => (v + 0.5) / 64);
 
-const hand = (x: number) => 0.6 * (1 - Math.exp(-6 * x));
-const general = (x: number) => 0.02 + 0.93 * Math.pow(x, 1.35);
-
-let CROSS = 0.5;
-for (let x = 0.2; x < 1; x += 0.001)
-  if (general(x) >= hand(x)) {
-    CROSS = x;
-    break;
-  }
-
-/** Caption shown while the slider is below each threshold. */
-const CAPTIONS: [number, string][] = [
-  [0.25, "With little compute, the hand-built system is ahead."],
-  [0.5, "Each new rule adds less than the one before it."],
-  [CROSS, "As compute grows, the general method catches up."],
-  [0.85, "Past the crossover, it pulls ahead."],
-  [Infinity, "The hand-built rules level off while the general method keeps climbing."],
-];
+function readInk(): [number, number, number] {
+  const m = getComputedStyle(document.documentElement).getPropertyValue("--ink").match(/\d+/g);
+  return m ? (m.slice(0, 3).map(Number) as [number, number, number]) : [237, 237, 237];
+}
 
 export function mountBitter(root: HTMLElement) {
-  const canvas = root.querySelector("canvas")!;
-  const ctx = canvas.getContext("2d")!;
-  canvas.width = WW;
-  canvas.height = WH;
-  const image = ctx.createImageData(WW, WH);
-  const slider = root.querySelector<HTMLInputElement>("input[type=range]")!;
-  const caption = root.querySelector<HTMLElement>("[data-caption]")!;
-  const labelHand = root.querySelector<HTMLElement>("[data-label=hand]")!;
-  const labelGeneral = root.querySelector<HTMLElement>("[data-label=general]")!;
-  const labelCross = root.querySelector<HTMLElement>("[data-label=cross]")!;
-  const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const canvases = [...root.querySelectorAll<HTMLCanvasElement>("canvas[data-bar]")];
+  if (!canvases.length) return;
 
-  let s = reduced ? 1 : 0; // how far along the compute axis is drawn, 0..1
-  let sweeping = false;
-  let ink = [237, 237, 237];
+  function draw() {
+    const [r, g, b] = readInk();
+    for (const c of canvases) {
+      const w = Number(c.dataset.w) || 120;
+      const h = Number(c.dataset.h) || 5;
+      c.width = w;
+      c.height = h;
+      const ctx = c.getContext("2d")!;
+      const img = ctx.createImageData(w, h);
+      const d = img.data;
 
-  function readInk() {
-    const m = getComputedStyle(document.documentElement).getPropertyValue("--ink").match(/\d+/g);
-    if (m) ink = m.slice(0, 3).map(Number);
-  }
-
-  const px = (x: number) => AX.x0 + x * (AX.x1 - AX.x0);
-  const py = (v: number) => AX.y1 - v * (AX.y1 - AX.y0);
-
-  function render() {
-    const data = image.data;
-    const [r, g, b] = ink;
-    for (let i = 0; i < data.length; i += 4) {
-      data[i] = r;
-      data[i + 1] = g;
-      data[i + 2] = b;
-      data[i + 3] = 0;
-    }
-    const set = (x: number, y: number, a: number) => {
-      x = Math.round(x);
-      y = Math.round(y);
-      if (x < 0 || y < 0 || x >= WW || y >= WH) return;
-      const i = (y * WW + x) * 4 + 3;
-      data[i] = Math.max(data[i], a);
-    };
-
-    // baseline
-    for (let x = AX.x0; x <= AX.x1; x += 2) set(x, AX.y1 + 1, 110);
-
-    // Light dither under the general curve. Once it has passed the
-    // hand-built one, the gap between them gets a denser fill.
-    const xEnd = px(s);
-    for (let x = AX.x0; x <= xEnd; x++) {
-      const t = (x - AX.x0) / (AX.x1 - AX.x0);
-      const yg = py(general(t));
-      const yh = py(hand(t));
-      for (let y = Math.ceil(yg); y <= AX.y1; y++) {
-        const th = BAYER[(y & 7) * 8 + (x & 7)];
-        const inGap = t > CROSS && y < yh;
-        if (inGap ? 0.42 > th : 0.1 > th) set(x, y, inGap ? 150 : 90);
+      for (let y = 0; y < h; y++) {
+        for (let x = 0; x < w; x++) {
+          const t = x / Math.max(1, w - 1);
+          const density = 0.16 + 0.72 * Math.pow(t, 1.15);
+          if (density > BAYER[(y & 7) * 8 + (x & 7)]) {
+            const idx = (y * w + x) * 4;
+            d[idx] = r;
+            d[idx + 1] = g;
+            d[idx + 2] = b;
+            d[idx + 3] = 215;
+          }
+        }
       }
+      ctx.putImageData(img, 0, 0);
     }
-
-    // Curves, two pixels thick. The hand-built one is drawn dimmer.
-    for (let i = 0; i <= 2400; i++) {
-      const t = (i / 2400) * s;
-      const x = px(t);
-      const yh = py(hand(t));
-      const yg = py(general(t));
-      set(x, yh, 150);
-      set(x, yh + 1, 150);
-      set(x, yg, 255);
-      set(x, yg - 1, 255);
-    }
-
-    if (s >= CROSS) {
-      const cx = px(CROSS);
-      for (let y = py(general(CROSS)) + 4; y <= AX.y1; y += 2) set(cx, y, 200);
-    }
-    ctx.putImageData(image, 0, 0);
-
-    // HTML labels ride on the ends of the curves, clamped inside the stage so they never clip or jump.
-    const stageW = canvas.clientWidth;
-    const placeEnd = (el: HTMLElement, x: number, y: number) => {
-      const tipX = (x / WW) * stageW;
-      const w = el.offsetWidth;
-      const left = Math.max(0, Math.min(stageW - w, tipX - w - 6));
-      el.style.left = `${left}px`;
-      el.style.top = `${(y / WH) * 100}%`;
-    };
-    placeEnd(labelHand, px(s), py(hand(s)));
-    placeEnd(labelGeneral, px(s), py(general(s)));
-    const show = s > 0.06 ? "1" : "0";
-    labelHand.style.opacity = show;
-    labelGeneral.style.opacity = show;
-    // Whichever curve is on top gets its label above the line.
-    const generalAhead = general(s) > hand(s);
-    labelGeneral.dataset.side = generalAhead ? "above" : "below";
-    labelHand.dataset.side = generalAhead ? "below" : "above";
-    labelCross.style.left = `${(px(CROSS) / WW) * 100}%`;
-    labelCross.style.top = `${(AX.y1 / WH) * 100}%`;
-    labelCross.style.opacity = s >= CROSS ? "1" : "0";
-
-    caption.textContent = CAPTIONS.find(([until]) => s < until)![1];
   }
 
-  let raf = 0;
-  const kick = () => {
-    if (!raf)
-      raf = requestAnimationFrame(() => {
-        raf = 0;
-        render();
-      });
-  };
-
-  slider.addEventListener("input", () => {
-    sweeping = false;
-    if (!caption.hasAttribute("aria-live")) caption.setAttribute("aria-live", "polite");
-    s = Number(slider.value) / 1000;
-    kick();
+  draw();
+  new MutationObserver(draw).observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ["data-theme"],
   });
-
-  function sweep() {
-    sweeping = true;
-    const start = performance.now();
-    const step = (now: number) => {
-      if (!sweeping) return;
-      const k = Math.min(1, (now - start) / 5600);
-      s = k < 0.5 ? 2 * k * k : 1 - (-2 * k + 2) ** 2 / 2;
-      slider.value = String(Math.round(s * 1000));
-      render();
-      if (k < 1) requestAnimationFrame(step);
-      else sweeping = false;
-    };
-    requestAnimationFrame(step);
-  }
-
-  readInk();
-  slider.value = String(s * 1000);
-  render();
-  new ResizeObserver(kick).observe(canvas);
-  new MutationObserver(() => {
-    readInk();
-    kick();
-  }).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
-
-  if (!reduced) {
-    const io = new IntersectionObserver(
-      ([e]) => {
-        if (!e.isIntersecting) return;
-        io.disconnect();
-        setTimeout(sweep, 250);
-      },
-      { threshold: 0.6 },
-    );
-    io.observe(canvas);
-  }
 }
