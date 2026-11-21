@@ -375,11 +375,11 @@ button {
     filter 0.2s ease,
     opacity 0.2s ease;
 }
-img.mark {
+.marks img.mark {
   filter: grayscale(1) contrast(0.88);
   opacity: 0.72;
 }
-[data-theme="dark"] img.mark {
+[data-theme="dark"] .marks img.mark {
   filter: grayscale(1) contrast(0.92) brightness(1.08);
 }
 .mark-text {
@@ -441,23 +441,15 @@ img.mark {
   .marks button:hover {
     background: color-mix(in srgb, var(--fg) 7%, transparent);
   }
-  .marks button:hover img.mark,
-  .row:hover img.mark {
+  .marks button:hover img.mark {
     filter: none;
     opacity: 1;
-  }
-}
-@media (hover: none) {
-  .row img.mark {
-    filter: none;
-    opacity: 0.95;
   }
 }
 .marks button:focus-visible {
   background: color-mix(in srgb, var(--fg) 7%, transparent);
 }
-.marks button:focus-visible img.mark,
-.row.flash img.mark {
+.marks button:focus-visible img.mark {
   filter: none;
   opacity: 1;
 }
@@ -1179,6 +1171,7 @@ a.badge:active {
   .lede {
     font-size: 1rem;
   }
+  .marks,
   .corner {
     display: none;
   }

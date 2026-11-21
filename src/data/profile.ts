@@ -53,7 +53,7 @@ export type Entry = {
   points?: string[];
   /** Anchor id, so a logo elsewhere on the page can jump to this row. */
   id?: string;
-  /** File in public/logos. Shown grey, in colour on hover. */
+  /** File in public/logos. */
   logo?: string;
   /**
    * Small chips under the summary. An award with a `target` jumps to that
@@ -77,11 +77,11 @@ export const work: Entry[] = [
     id: "tofly",
     logo: "tofly.png",
     title: "Tofly",
-    role: "Co-Founder",
+    role: "Co-Founder & Product Engineer",
     date: "Jun 2026 – now",
     href: "https://tofly.id",
     summary:
-      "AI-assisted TOEFL, IELTS and TOEIC prep used by 1,000+ Indonesian students. I run product, partnerships and growth.",
+      "AI-assisted TOEFL, IELTS and TOEIC prep used by 1,000+ Indonesian students. I lead product engineering, shipping web features and AI workflows alongside partnerships and growth.",
     badges: [
       { kind: "award", label: "1st · KMI Expo 2026", target: "kmi-expo" },
       { kind: "funding", label: "Funded by Kemdiktisaintek (P2MW)" },
@@ -93,7 +93,7 @@ export const work: Entry[] = [
       "Co-founded tofly.id, an AI-assisted TOEFL, IELTS and TOEIC platform serving 1,000+ Indonesian learners.",
       "Won 1st place nationally at KMI Expo 2026 (Bisnis Digital Berkembang) and secured P2MW grant funding from Kemdiktisaintek.",
       "Accepted into NVIDIA Inception, Google for Startups and Claude for Startups.",
-      "Own the product roadmap, institutional partnerships and user growth.",
+      "Lead product engineering, building and shipping web features and AI practice workflows alongside partnerships and growth.",
     ],
   },
   {
@@ -163,7 +163,7 @@ export const work: Entry[] = [
 export const projects: Entry[] = [
   {
     title: "tofly.id",
-    role: "Co-Founder",
+    role: "Co-Founder & Product Engineer",
     date: "2026",
     href: "https://tofly.id",
     badges: [{ kind: "award", label: "1st · KMI Expo 2026", target: "kmi-expo" }],
