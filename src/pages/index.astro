@@ -7,7 +7,6 @@ import Make from "../components/Make.astro";
 import Salute from "../components/Salute.astro";
 import { profile, marks, work, projects, awards, education } from "../data/profile";
 
-const year = new Date().getFullYear();
 ---
 
 <Base egg>
@@ -119,8 +118,4 @@ const year = new Date().getFullYear();
 
   <Cv />
 
-  <footer class="foot">
-    <span>© {year} {profile.name.toLowerCase()}</span>
-    <span class="foot-meta">viewport <span data-viewport></span> · [c] cv · [t] theme</span>
-  </footer>
 </Base>

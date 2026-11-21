@@ -3,7 +3,6 @@ import Base from "../layouts/Base.astro";
 import { profile } from "../data/profile";
 import { hi, recommend, albums, manga, type Shelf } from "../data/hi";
 
-const year = new Date().getFullYear();
 ---
 
 <Base title="reksa" description="Albums, manga, a duck game and whatever I'm recommending this week." egg>
@@ -153,10 +152,6 @@ const year = new Date().getFullYear();
     </section>
   </main>
 
-  <footer class="foot">
-    <span>© {year} reksa</span>
-    <span class="foot-meta">[t] theme</span>
-  </footer>
 </Base>
 
 <script>

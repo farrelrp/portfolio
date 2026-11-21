@@ -113,13 +113,6 @@ if (clock) {
   setInterval(tick, 15_000);
 }
 
-const viewport = document.querySelector<HTMLElement>("[data-viewport]");
-if (viewport) {
-  const show = () => (viewport.textContent = `${innerWidth}×${innerHeight}`);
-  show();
-  addEventListener("resize", show, { passive: true });
-}
-
 const canvas = document.querySelector<HTMLCanvasElement>("canvas[data-duck]");
 if (canvas) mountDuck(canvas);
 
