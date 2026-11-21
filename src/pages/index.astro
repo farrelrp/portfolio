@@ -2,6 +2,8 @@
 import Base from "../layouts/Base.astro";
 import List from "../components/List.astro";
 import Cv from "../components/Cv.astro";
+import Bitter from "../components/Bitter.astro";
+import Salute from "../components/Salute.astro";
 import { profile, marks, work, projects, awards, education } from "../data/profile";
 
 const year = new Date().getFullYear();
@@ -67,6 +69,8 @@ const year = new Date().getFullYear();
       <p class="corner">{profile.location.toLowerCase()} <span aria-hidden="true">· scroll ↓</span></p>
     </section>
 
+    <Bitter />
+
     <div class="column">
       <section class="section" id="about" aria-labelledby="about-h">
         <h2 id="about-h"><span aria-hidden="true">*</span> about</h2>
@@ -104,6 +108,8 @@ const year = new Date().getFullYear();
   </main>
 
   <Cv />
+
+  <Salute />
 
   <footer class="foot">
     <span>© {year} {profile.name.toLowerCase()}</span>
