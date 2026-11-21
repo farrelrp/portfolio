@@ -6,7 +6,7 @@
 
 const WW = 220;
 const WH = 120;
-const AX = { x0: 6, x1: 214, y0: 10, y1: 112 }; // plot area, in canvas pixels
+const AX = { x0: 6, x1: 214, y0: 18, y1: 112 }; // plot area, in canvas pixels
 
 const BAYER = [
   0, 32, 8, 40, 2, 34, 10, 42, 48, 16, 56, 24, 50, 18, 58, 26, 12, 44, 4, 36, 14, 46, 6, 38, 60,
@@ -26,11 +26,11 @@ for (let x = 0.2; x < 1; x += 0.001)
 
 /** Caption shown while the slider is below each threshold. */
 const CAPTIONS: [number, string][] = [
-  [0.25, "With little compute, the hand-built system wins easily."],
+  [0.25, "With little compute, the hand-built system is ahead."],
   [0.5, "Each new rule adds less than the one before it."],
-  [CROSS, "With more compute, the general method catches up."],
-  [0.85, "It overtakes and keeps climbing."],
-  [Infinity, "The hand-built system has hit its ceiling."],
+  [CROSS, "As compute grows, the general method catches up."],
+  [0.85, "Past the crossover, it pulls ahead."],
+  [Infinity, "The hand-built rules level off while the general method keeps climbing."],
 ];
 
 export function mountBitter(root: HTMLElement) {
@@ -110,13 +110,17 @@ export function mountBitter(root: HTMLElement) {
     }
     ctx.putImageData(image, 0, 0);
 
-    // HTML labels ride on the ends of the curves.
-    const place = (el: HTMLElement, x: number, y: number) => {
-      el.style.left = `${(x / WW) * 100}%`;
+    // HTML labels ride on the ends of the curves, clamped inside the stage so they never clip or jump.
+    const stageW = canvas.clientWidth;
+    const placeEnd = (el: HTMLElement, x: number, y: number) => {
+      const tipX = (x / WW) * stageW;
+      const w = el.offsetWidth;
+      const left = Math.max(0, Math.min(stageW - w, tipX - w - 6));
+      el.style.left = `${left}px`;
       el.style.top = `${(y / WH) * 100}%`;
     };
-    place(labelHand, px(s), py(hand(s)));
-    place(labelGeneral, px(s), py(general(s)));
+    placeEnd(labelHand, px(s), py(hand(s)));
+    placeEnd(labelGeneral, px(s), py(general(s)));
     const show = s > 0.06 ? "1" : "0";
     labelHand.style.opacity = show;
     labelGeneral.style.opacity = show;
@@ -124,7 +128,8 @@ export function mountBitter(root: HTMLElement) {
     const generalAhead = general(s) > hand(s);
     labelGeneral.dataset.side = generalAhead ? "above" : "below";
     labelHand.dataset.side = generalAhead ? "below" : "above";
-    place(labelCross, px(CROSS), AX.y1);
+    labelCross.style.left = `${(px(CROSS) / WW) * 100}%`;
+    labelCross.style.top = `${(AX.y1 / WH) * 100}%`;
     labelCross.style.opacity = s >= CROSS ? "1" : "0";
 
     caption.textContent = CAPTIONS.find(([until]) => s < until)![1];
@@ -141,6 +146,7 @@ export function mountBitter(root: HTMLElement) {
 
   slider.addEventListener("input", () => {
     sweeping = false;
+    if (!caption.hasAttribute("aria-live")) caption.setAttribute("aria-live", "polite");
     s = Number(slider.value) / 1000;
     kick();
   });
@@ -163,6 +169,7 @@ export function mountBitter(root: HTMLElement) {
   readInk();
   slider.value = String(s * 1000);
   render();
+  new ResizeObserver(kick).observe(canvas);
   new MutationObserver(() => {
     readInk();
     kick();

@@ -3,6 +3,7 @@ import Base from "../layouts/Base.astro";
 import List from "../components/List.astro";
 import Cv from "../components/Cv.astro";
 import Bitter from "../components/Bitter.astro";
+import Make from "../components/Make.astro";
 import Salute from "../components/Salute.astro";
 import { profile, marks, work, projects, awards, education } from "../data/profile";
 
@@ -10,6 +11,7 @@ const year = new Date().getFullYear();
 ---
 
 <Base egg>
+  <a class="skip" href="#main">Skip to content</a>
   <header class="bar">
     <div class="bar-left">
       <a class="bar-name" href="/">{profile.short}</a>
@@ -19,6 +21,11 @@ const year = new Date().getFullYear();
         <a href="/hi">me</a>
       </nav>
     </div>
+    <nav class="bar-sections" aria-label="Sections">
+      <a href="#work">experience</a>
+      <a href="#projects">projects</a>
+      <a href="#awards">awards</a>
+    </nav>
     <div class="bar-right">
       <span class="bar-clock" title="Time in Jakarta">jkt <span data-clock>--:--</span></span>
       <button type="button" class="chip" data-action="cv" aria-pressed="false" title="Toggle CV view [c]">
@@ -30,7 +37,7 @@ const year = new Date().getFullYear();
     </div>
   </header>
 
-  <main class="site">
+  <main class="site" id="main">
     <section class="hero">
       <canvas data-duck data-src="/duck.png" aria-hidden="true"></canvas>
       <div class="hero-text">
@@ -54,11 +61,11 @@ const year = new Date().getFullYear();
             }
           </nav>
         </div>
-        <ul class="marks" aria-label="Places I have worked and won">
+        <ul class="marks" aria-label="Work, school and awards">
           {
             marks.map((m) => (
               <li>
-                <button type="button" data-jump={m.target} aria-label={`Jump to ${m.name}`} title={m.name}>
+                <button type="button" data-jump={m.target} aria-label={`Jump to ${m.name}`} title={`Jump to ${m.name}`}>
                   <img class="mark" src={`/logos/${m.logo}`} alt="" width="26" height="26" />
                 </button>
               </li>
@@ -66,20 +73,18 @@ const year = new Date().getFullYear();
           }
         </ul>
       </div>
-      <p class="corner">{profile.location.toLowerCase()} <span aria-hidden="true">· scroll ↓</span></p>
+      <a class="corner" href="#bitter">{profile.location.toLowerCase()} <span aria-hidden="true">· scroll ↓</span></a>
     </section>
 
     <Bitter />
+
+    <Make />
 
     <div class="column">
       <section class="section" id="about" aria-labelledby="about-h">
         <h2 id="about-h"><span aria-hidden="true">*</span> about</h2>
         <p class="about">{profile.about}</p>
       </section>
-
-      <List id="work" entries={work} />
-      <List id="projects" entries={projects} />
-      <List id="awards" entries={awards} />
 
       <section class="section" id="education" aria-labelledby="education-h">
         <h2 id="education-h"><span aria-hidden="true">*</span> education</h2>
@@ -89,13 +94,16 @@ const year = new Date().getFullYear();
             <div class="row-body">
               <p class="row-head">
                 <span class="row-title">{education.school}</span>
-                <span class="row-role">{education.degree}</span>
               </p>
-              <p class="row-summary">{education.notes.join(". ")}.</p>
+              <p class="row-role">{education.degree}</p>
             </div>
           </li>
         </ul>
       </section>
+
+      <List id="work" entries={work} />
+      <List id="projects" entries={projects} />
+      <List id="awards" entries={awards} />
 
       <section class="section contact" id="contact" aria-labelledby="contact-h">
         <h2 id="contact-h"><span aria-hidden="true">*</span> contact</h2>
@@ -105,11 +113,11 @@ const year = new Date().getFullYear();
         </p>
       </section>
     </div>
+
+    <Salute />
   </main>
 
   <Cv />
-
-  <Salute />
 
   <footer class="foot">
     <span>© {year} {profile.name.toLowerCase()}</span>

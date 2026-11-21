@@ -36,9 +36,8 @@ export const albums: Shelf[] = [
   { title: "Grace", by: "Jeff Buckley", cover: "/hi/grace.jpg" },
   { title: "Blonde", by: "Frank Ocean", cover: "/hi/blond.jpg" },
   { title: "IGOR", by: "Tyler, The Creator", cover: "/hi/igor.jpg" },
-  // Unconfirmed: identified from the cover art only.
-  { title: "INSANO", by: "Kid Cudi", cover: "/hi/insano.jpg" },
-  { title: "Passion, Pain & Demon Slayin'", by: "Kid Cudi", cover: "/hi/ppds.jpg" },
+  { title: "Let God Sort Em Out", by: "Clipse", cover: "/hi/let-god-sort-em-out.jpg" },
+  { title: "eureka", by: "Kinoko Teikoku", cover: "/hi/eureka.jpg" },
   { title: "Nurture", by: "Porter Robinson", cover: "/hi/nurture.jpg" },
   { title: "Chainsaw Man The Movie: Reze Arc", by: "Kensuke Ushio", cover: "/hi/reze-arc.jpg" },
   { title: "Continuum", by: "John Mayer", cover: "/hi/continuum.jpg" },
@@ -49,4 +48,8 @@ export const manga: Shelf[] = [
   { title: "The Climber", by: "Shinichi Sakamoto", cover: "/hi/the-climber.jpg", href: "https://anilist.co/manga/37375" },
   { title: "Goodbye, Eri", by: "Tatsuki Fujimoto", cover: "/hi/goodbye-eri.jpg", href: "https://anilist.co/manga/146983" },
   { title: "Blood on the Tracks", by: "Shuzo Oshimi", cover: "/hi/blood-on-the-tracks.jpg", href: "https://anilist.co/manga/98397" },
+  { title: "Welcome Back, Alice", by: "Shuzo Oshimi", cover: "/hi/welcome-back-alice.jpg", href: "https://anilist.co/manga/116534" },
+  { title: "Yotsuba to!", by: "Kiyohiko Azuma", cover: "/hi/yotsuba-to.jpg", href: "https://anilist.co/manga/30104" },
+  { title: "Ikoku Nikki", by: "Tomoko Yamashita", cover: "/hi/ikoku-nikki.jpg", href: "https://anilist.co/manga/106331" },
+  { title: "We Shall Now Begin Ethics", by: "Shiori Amase", cover: "/hi/we-shall-now-begin-ethics.jpg", href: "https://anilist.co/manga/104780" },
 ];

@@ -9,7 +9,10 @@ const cvProjects = projects.filter((p) =>
 <article class="cv" aria-label="CV">
   <div class="cv-tools">
     <button type="button" class="pill" data-action="site">← back to site</button>
-    <button type="button" class="pill" data-action="print">print / save as pdf</button>
+    <div class="cv-tools-end">
+      <a class="pill" href="/farrel-reksa-prawira-cv.pdf" download="Farrel Reksa Prawira CV.pdf">download pdf</a>
+      <button type="button" class="pill" data-action="print">print</button>
+    </div>
   </div>
 
   <div class="cv-sheet">
@@ -20,11 +23,11 @@ const cvProjects = projects.filter((p) =>
         <span aria-hidden="true">·</span>
         <a href={`mailto:${profile.email}`}>{profile.email}</a>
         <span aria-hidden="true">·</span>
-        <a href="https://rrreksa.com">rrreksa.com</a>
+        <a href="https://rrreksa.com" target="_blank" rel="noopener">rrreksa.com</a>
         <span aria-hidden="true">·</span>
-        <a href="https://www.linkedin.com/in/farrel-reksa/">linkedin.com/in/farrel-reksa</a>
+        <a href="https://www.linkedin.com/in/farrel-reksa/" target="_blank" rel="noopener">linkedin.com/in/farrel-reksa</a>
         <span aria-hidden="true">·</span>
-        <a href="https://github.com/farrelrp">github.com/farrelrp</a>
+        <a href="https://github.com/farrelrp" target="_blank" rel="noopener">github.com/farrelrp</a>
       </p>
     </header>
 
@@ -74,8 +77,8 @@ const cvProjects = projects.filter((p) =>
             <div class="cv-line">
               <p>
                 <strong>{p.title}</strong>, {p.role}
-                {p.href && (
-                  <a class="cv-link" href={p.href}>
+                {p.href && !p.links && (
+                  <a class="cv-link" href={p.href} target="_blank" rel="noopener">
                     {p.href.replace(/^https?:\/\//, "").replace(/\/$/, "")}
                   </a>
                 )}
@@ -87,6 +90,16 @@ const cvProjects = projects.filter((p) =>
               {p.badges
                 ?.filter((bd) => bd.kind === "award")
                 .map((bd) => <span class="cv-award"> {bd.label.replace(" · ", " Place, ")}.</span>)}
+              {p.links && (
+                <span class="cv-refs">
+                  {" "}({p.links.map((l, i) => (
+                    <>
+                      {i > 0 && " · "}
+                      <a href={l.href} target="_blank" rel="noopener">{l.label}</a>
+                    </>
+                  ))})
+                </span>
+              )}
             </p>
           </div>
         ))
@@ -104,7 +117,19 @@ const cvProjects = projects.filter((p) =>
               </p>
               <span>{a.date}</span>
             </div>
-            <p class="cv-note">{a.summary}</p>
+            <p class="cv-note">
+              {a.summary}
+              {a.links && (
+                <span class="cv-refs">
+                  {" "}({a.links.map((l, i) => (
+                    <>
+                      {i > 0 && " · "}
+                      <a href={l.href} target="_blank" rel="noopener">{l.label}</a>
+                    </>
+                  ))})
+                </span>
+              )}
+            </p>
           </div>
         ))
       }
@@ -117,7 +142,15 @@ const cvProjects = projects.filter((p) =>
           skills.map((s) => (
             <>
               <dt>{s.label}</dt>
-              <dd>{s.items}</dd>
+              <dd>
+                {s.items}
+                {s.link && (
+                  <>
+                    {" "}
+                    (<a href={s.link.href} target="_blank" rel="noopener">{s.link.text}</a>)
+                  </>
+                )}
+              </dd>
             </>
           ))
         }

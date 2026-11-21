@@ -3,21 +3,21 @@
 // rest of the page. The chart is drawn by src/scripts/bitter.ts.
 ---
 
-<section class="bitter" aria-labelledby="bitter-h" data-bitter>
+<section class="bitter" id="bitter" aria-labelledby="bitter-h" data-bitter>
   <div class="bitter-text">
     <p class="bitter-eyebrow"><span aria-hidden="true">*</span> on building with ai</p>
     <h2 id="bitter-h">The bitter lesson</h2>
     <p>
-      In 2019, Rich Sutton looked back on 70 years of AI research and noted one recurring pattern: hand-crafted domain
-      knowledge helps early on, then gets overtaken by general methods that learn and search as compute scales.
+      Rich Sutton wrote about a pattern that keeps repeating in AI. Hand-coded tricks win early on, then get passed once
+      there's enough compute for a general method to learn the problem itself.
     </p>
     <p>
-      It played out in chess, Go, speech recognition and computer vision. It's bitter because the hand-engineered parts
-      are usually the ones people were proudest of.
+      Happened in chess, Go, speech and vision. It stings because the clever parts people spent years crafting are
+      usually the first things thrown out.
     </p>
     <p class="bitter-take">
-      Building on AI models is no different. Features that patch today's model quirks are hand-built rules; I'd rather
-      build the pieces that get stronger as the models do.
+      I try to keep that in mind when building with AI. Most workarounds for today's model quirks won't age well. I'd
+      rather work on the parts that get better when the next model drops.
     </p>
   </div>
 
@@ -37,7 +37,7 @@
       <input type="range" min="0" max="1000" value="0" />
       <span aria-hidden="true">→</span>
     </label>
-    <p class="bitter-caption" data-caption aria-live="polite"></p>
+    <p class="bitter-caption" data-caption></p>
   </figure>
 </section>
 
@@ -52,6 +52,7 @@
     max-width: 66rem;
     margin: 0 auto;
     padding: 7.5rem var(--gutter) 2rem;
+    scroll-margin-top: var(--bar);
     display: grid;
     grid-template-columns: minmax(0, 24rem) minmax(0, 1fr);
     gap: 4rem;
@@ -73,7 +74,7 @@
     letter-spacing: -0.045em;
   }
   .bitter-text p:not(.bitter-eyebrow) {
-    color: var(--muted);
+    color: var(--fg-2);
     font-size: 1.0625rem;
     line-height: 1.6;
     text-wrap: pretty;
@@ -95,7 +96,7 @@
     margin-bottom: 0.5rem;
     font-family: var(--mono);
     font-size: 0.75rem;
-    color: var(--faint);
+    color: var(--muted);
   }
   .bitter-stage {
     position: relative;
@@ -109,8 +110,6 @@
   }
   .bitter-label {
     position: absolute;
-    translate: -100% 0;
-    margin-left: -0.35rem;
     padding: 0.1rem 0.35rem;
     border-radius: 3px;
     background: var(--bg);
@@ -137,7 +136,7 @@
     padding: 0;
     background: none;
     font-size: 0.6875rem;
-    color: var(--faint);
+    color: var(--muted);
   }
 
   .bitter-x {
@@ -147,7 +146,7 @@
     gap: 0.75rem;
     font-family: var(--mono);
     font-size: 0.75rem;
-    color: var(--faint);
+    color: var(--muted);
   }
   input[type="range"] {
     flex: 1;
@@ -160,11 +159,11 @@
   }
   input[type="range"]::-webkit-slider-runnable-track {
     height: 2px;
-    background: var(--rule);
+    background: var(--border);
   }
   input[type="range"]::-moz-range-track {
     height: 2px;
-    background: var(--rule);
+    background: var(--border);
   }
   input[type="range"]::-webkit-slider-thumb {
     -webkit-appearance: none;
@@ -190,7 +189,11 @@
     outline: none;
   }
   input[type="range"]:focus-visible::-webkit-slider-thumb {
-    outline: 1px solid var(--fg);
+    outline: 2px solid var(--fg);
+    outline-offset: 3px;
+  }
+  input[type="range"]:focus-visible::-moz-range-thumb {
+    outline: 2px solid var(--fg);
     outline-offset: 3px;
   }
   .bitter-caption {

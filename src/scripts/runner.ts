@@ -103,7 +103,11 @@ export function mountRunner(root: HTMLElement) {
     finalEl.textContent = mode === "dead" ? String(score) : "";
     root.setAttribute(
       "aria-label",
-      mode === "dead" ? `Score ${score}. Play again.` : mode === "idle" ? "Play duck" : "Duck, running",
+      mode === "dead"
+        ? `Game over, score ${score}. Tap or press space to play again.`
+        : mode === "idle"
+          ? "Play duck runner. Tap or press space to jump."
+          : "Duck runner active. Tap or press space to jump.",
     );
   }
 
@@ -329,8 +333,16 @@ export function mountRunner(root: HTMLElement) {
     raf = requestAnimationFrame(frame);
   }
 
+  // Only hijack pointerdown for zero-latency jumps while running; starting/restarting
+  // uses click so touch users scrolling past the canvas don't trigger it by accident.
   root.addEventListener("pointerdown", (e) => {
+    if (state !== "run") return;
     e.preventDefault();
+    root.focus({ preventScroll: true });
+    press();
+  });
+  root.addEventListener("click", () => {
+    if (state === "run") return;
     root.focus({ preventScroll: true });
     press();
   });

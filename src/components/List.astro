@@ -32,15 +32,15 @@ const { id, entries } = Astro.props;
                 ) : (
                   <span class="row-title">{e.title}</span>
                 )}
-                {e.role && <span class="row-role">{e.role}</span>}
               </p>
+              {e.role && <p class="row-role">{e.role}</p>}
               <p class="row-summary">{e.summary}</p>
-              {e.badges && (
+              {(e.badges || e.links) && (
                 <ul class="badges">
-                  {e.badges.map((bd) => (
+                  {e.badges?.map((bd) => (
                     <li>
                       {bd.target ? (
-                        <button type="button" class={`badge badge-${bd.kind}`} data-jump={bd.target} title="Jump to the award">
+                        <button type="button" class={`badge badge-${bd.kind}`} data-jump={bd.target} title="Jump to award">
                           <span class="badge-star" aria-hidden="true">*</span>
                           {bd.label}
                           <span class="badge-arrow" aria-hidden="true">↓</span>
@@ -51,6 +51,30 @@ const { id, entries } = Astro.props;
                           {bd.label}
                         </span>
                       )}
+                    </li>
+                  ))}
+                  {e.links?.map((l) => (
+                    <li>
+                      <a class="badge badge-link" href={l.href} target="_blank" rel="noopener">
+                        {l.label === "paper" ? (
+                          <svg class="badge-icon" viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M4 2.5h5.5L12.5 5.5v8h-8.5z" />
+                            <path d="M9.5 2.5v3h3" />
+                            <path d="M6 8.5h4M6 11h3" />
+                          </svg>
+                        ) : l.label === "slides" ? (
+                          <svg class="badge-icon" viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <rect x="2" y="3" width="12" height="8" rx="1" />
+                            <path d="M8 11v2.5M5.5 13.5h5" />
+                          </svg>
+                        ) : (
+                          <svg class="badge-icon" viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M6.8 9.2l2.4-2.4M5.5 7L4 8.5a2.5 2.5 0 0 0 3.5 3.5L9 10.5M10.5 9L12 7.5A2.5 2.5 0 0 0 8.5 4L7 5.5" />
+                          </svg>
+                        )}
+                        {l.label}
+                        <span class="arrow" aria-hidden="true">↗</span>
+                      </a>
                     </li>
                   ))}
                 </ul>

@@ -17,22 +17,37 @@ function toggleTheme() {
 }
 
 // ---- site <-> cv -----------------------------------------------------------
+const hasCv = !!document.querySelector(".cv");
+const baseTitle = document.title;
+let savedScrollY = 0;
+
+if (!hasCv && root.dataset.view === "cv") {
+  root.dataset.view = "site";
+}
+
 function applyView(view: "site" | "cv") {
+  if (!hasCv) return;
+  const leavingSite = root.dataset.view !== "cv" && view === "cv";
+  if (leavingSite) savedScrollY = window.scrollY;
   root.dataset.view = view;
-  document.title = view === "cv" ? "Farrel Reksa Prawira, CV" : "Farrel Reksa Prawira";
+  document.title = view === "cv" ? "Farrel Reksa Prawira · CV" : baseTitle;
   for (const b of document.querySelectorAll<HTMLElement>("[data-action=cv]"))
     b.setAttribute("aria-pressed", String(view === "cv"));
-  window.scrollTo(0, 0);
+  if (view === "cv") window.scrollTo(0, 0);
+  else window.scrollTo(0, savedScrollY);
 }
-function setView(view: "site" | "cv") {
-  if (root.dataset.view === view) return;
-  history.replaceState(null, "", view === "cv" ? "#cv" : location.pathname);
+function setView(view: "site" | "cv", push = true) {
+  if (!hasCv || root.dataset.view === view) return;
+  const url = view === "cv" ? "#cv" : location.pathname + location.search;
+  if (push) history.pushState({ view }, "", url);
+  else history.replaceState({ view }, "", url);
   const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
   if (!reduced && "startViewTransition" in document) {
     (document as any).startViewTransition(() => applyView(view));
   } else applyView(view);
 }
 function toggleView() {
+  if (!hasCv) return;
   setView(root.dataset.view === "cv" ? "site" : "cv");
 }
 
@@ -48,10 +63,19 @@ document.addEventListener("click", (e) => {
   e.preventDefault();
 });
 
-window.addEventListener("hashchange", () => {
-  const view = location.hash === "#cv" ? "cv" : "site";
-  if (root.dataset.view !== view) applyView(view);
-});
+if (hasCv) {
+  if (root.dataset.view === "cv") {
+    document.title = "Farrel Reksa Prawira · CV";
+    for (const b of document.querySelectorAll<HTMLElement>("[data-action=cv]"))
+      b.setAttribute("aria-pressed", "true");
+  }
+  const syncFromHash = () => {
+    const view = location.hash === "#cv" ? "cv" : "site";
+    if (root.dataset.view !== view) applyView(view);
+  };
+  window.addEventListener("hashchange", syncFromHash);
+  window.addEventListener("popstate", syncFromHash);
+}
 
 // ---- logo -> row ------------------------------------------------------------
 function jumpTo(id: string) {
@@ -99,6 +123,28 @@ if (viewport) {
 const canvas = document.querySelector<HTMLCanvasElement>("canvas[data-duck]");
 if (canvas) mountDuck(canvas);
 
+// ---- active section highlight in top bar -----------------------------------
+const sectionLinks = [...document.querySelectorAll<HTMLAnchorElement>(".bar-sections a[href^='#']")];
+if (sectionLinks.length) {
+  const targets = sectionLinks
+    .map((a) => ({ link: a, el: document.getElementById(a.getAttribute("href")!.slice(1)) }))
+    .filter((x): x is { link: HTMLAnchorElement; el: HTMLElement } => !!x.el);
+
+  const updateActive = () => {
+    const line = window.innerHeight * 0.35;
+    let active: HTMLAnchorElement | null = null;
+    for (const { link, el } of targets) {
+      if (el.getBoundingClientRect().top <= line) active = link;
+    }
+    for (const { link } of targets) {
+      if (link === active) link.setAttribute("aria-current", "location");
+      else link.removeAttribute("aria-current");
+    }
+  };
+  updateActive();
+  addEventListener("scroll", updateActive, { passive: true });
+}
+
 // ---- console easter egg ----------------------------------------------------
 const GLYPHS: Record<string, string[]> = {
   R: ["**** ", "*   *", "**** ", "*  * ", "*   *"],
@@ -111,5 +157,6 @@ if (document.body.dataset.egg !== undefined) {
   const art = [0, 1, 2, 3, 4]
     .map((row) => [..."REKSA"].map((ch) => GLYPHS[ch][row].replace(/\*/g, "**").replace(/ /g, "  ")).join("    "))
     .join("\n");
-  console.log(`\n${art}\n\n  hi. the source is at github.com/farrelrp\n  press [c] for the cv, [t] for the lights.\n`);
+  const keys = hasCv ? "press [c] for the cv, [t] for the lights." : "press [t] for the lights.";
+  console.log(`\n${art}\n\n  hi. code lives at github.com/farrelrp\n  ${keys}\n`);
 }

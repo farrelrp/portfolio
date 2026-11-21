@@ -11,7 +11,7 @@ interface Props {
 }
 const {
   title = profile.name,
-  description = `${profile.role}. ${profile.tagline}`,
+  description = `AI and product. ${profile.tagline}`,
   egg = false,
 } = Astro.props;
 ---
@@ -35,6 +35,10 @@ const {
         try {
           var t = localStorage.getItem("theme");
           if (t === "light" || t === "dark") d.dataset.theme = t;
+          if (t === "light") {
+            var m = document.querySelector('meta[name="theme-color"]');
+            if (m) m.setAttribute("content", "#f6f5f1");
+          }
         } catch (e) {}
         if (location.hash === "#cv") d.dataset.view = "cv";
       })();

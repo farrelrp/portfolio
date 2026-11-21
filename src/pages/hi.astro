@@ -7,9 +7,10 @@ const year = new Date().getFullYear();
 ---
 
 <Base title="reksa" description="Albums, manga, a duck game and whatever I'm recommending this week." egg>
+  <a class="skip" href="#main">Skip to content</a>
   <header class="bar">
     <div class="bar-left">
-      <a class="bar-name" href="/hi">{profile.short}</a>
+      <a class="bar-name" href="/">{profile.short}</a>
       <nav class="bar-switch" aria-label="Pages">
         <a href="/">work</a>
         <span aria-hidden="true">/</span>
@@ -24,14 +25,14 @@ const year = new Date().getFullYear();
     </div>
   </header>
 
-  <main class="hi">
+  <main class="hi" id="main">
     <section class="hi-hero">
       <img class="portrait" src="/hi/portrait.jpg" alt="Reksa leaning on a railing outside, city buildings behind" width="720" height="959" />
       <div class="hi-intro">
         <p class="eyebrow">{hi.location}</p>
-        <h1>{hi.intro}</h1>
+        <h1><span class="hl"><canvas aria-hidden="true" data-highlight></canvas>{hi.intro}</span></h1>
         <p class="lede">
-          This is the part that won't fit on <a class="lede-link" href="/">the other page</a><span class="arrow lede-arrow" aria-hidden="true">↗</span>.
+          This is the part that won't fit on <a class="lede-link" href="/">the other page<span class="arrow" aria-hidden="true">↗</span></a>.
           Here's what I've been into.
         </p>
         <nav class="links" aria-label="Elsewhere">
@@ -48,19 +49,30 @@ const year = new Date().getFullYear();
     </section>
 
     <section class="section" aria-labelledby="rec-h">
-      <h2 id="rec-h"><span aria-hidden="true">*</span> recommending right now</h2>
-      <a class="rec" href={recommend.href} target="_blank" rel="noopener">
-        <figure class="cover rec-cover" data-reveal>
+      <div class="section-head">
+        <h2 id="rec-h"><span aria-hidden="true">*</span> recommending right now</h2>
+        <span class="section-hint" aria-hidden="true">tap covers for colour</span>
+      </div>
+      <div class="rec">
+        <button
+          type="button"
+          class="cover rec-cover"
+          data-reveal
+          aria-pressed="false"
+          aria-label={`Toggle colour cover for ${recommend.title}`}
+        >
           <canvas data-dither={recommend.cover} aria-hidden="true"></canvas>
-          <img src={recommend.cover} alt={`${recommend.from} cover`} loading="lazy" />
-        </figure>
+          <img src={recommend.cover} alt="" loading="lazy" />
+        </button>
         <div class="rec-body">
           <p class="rec-kind">{recommend.kind}</p>
-          <p class="rec-title">{recommend.title}</p>
-          <p class="rec-by">{recommend.by}</p>
-          <p class="rec-cta">{recommend.cta} <span class="arrow" aria-hidden="true">↗</span></p>
+          <a class="rec-link" href={recommend.href} target="_blank" rel="noopener">
+            <p class="rec-title">{recommend.title}</p>
+            <p class="rec-by">{recommend.by}</p>
+            <p class="rec-cta">{recommend.cta} <span class="arrow" aria-hidden="true">↗</span></p>
+          </a>
         </div>
-      </a>
+      </div>
     </section>
 
     <section class="section" aria-labelledby="albums-h">
@@ -68,10 +80,16 @@ const year = new Date().getFullYear();
       <ul class="shelf shelf-albums">
         {albums.map((a: Shelf) => (
           <li>
-            <figure class="cover" data-reveal tabindex="0">
+            <button
+              type="button"
+              class="cover"
+              data-reveal
+              aria-pressed="false"
+              aria-label={`Toggle colour cover for ${a.title}`}
+            >
               <canvas data-dither={a.cover} aria-hidden="true"></canvas>
               <img src={a.cover} alt="" loading="lazy" />
-            </figure>
+            </button>
             <p class="shelf-title">{a.title}</p>
             <p class="shelf-by">{a.by}</p>
           </li>
@@ -84,12 +102,18 @@ const year = new Date().getFullYear();
       <ul class="shelf shelf-manga">
         {manga.map((m: Shelf) => (
           <li>
-            <a href={m.href} target="_blank" rel="noopener" class="shelf-link">
-              <figure class="cover cover-tall">
-                <canvas data-dither={m.cover} aria-hidden="true"></canvas>
-                <img src={m.cover} alt="" loading="lazy" />
-              </figure>
-              <p class="shelf-title">{m.title}</p>
+            <button
+              type="button"
+              class="cover cover-tall"
+              data-reveal
+              aria-pressed="false"
+              aria-label={`Toggle colour cover for ${m.title}`}
+            >
+              <canvas data-dither={m.cover} aria-hidden="true"></canvas>
+              <img src={m.cover} alt="" loading="lazy" />
+            </button>
+            <a href={m.href} target="_blank" rel="noopener" class="shelf-meta">
+              <p class="shelf-title">{m.title}<span class="arrow" aria-hidden="true">↗</span></p>
               <p class="shelf-by">{m.by}</p>
             </a>
           </li>
@@ -99,7 +123,14 @@ const year = new Date().getFullYear();
 
     <section class="section" aria-labelledby="game-h">
       <h2 id="game-h"><span aria-hidden="true">*</span> duck</h2>
-      <div class="runner" data-runner data-state="idle" tabindex="0" role="button" aria-label="Play duck">
+      <div
+        class="runner"
+        data-runner
+        data-state="idle"
+        tabindex="0"
+        role="button"
+        aria-label="Play duck runner. Tap or press space to jump."
+      >
         <div class="runner-hud" aria-hidden="true">
           <span data-best></span>
           <span data-score>00000</span>
@@ -109,6 +140,7 @@ const year = new Date().getFullYear();
           <span class="runner-final" data-final></span>
           <svg class="icon-play" viewBox="0 0 24 24" width="28" height="28"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" /></svg>
           <svg class="icon-retry" viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12a7.5 7.5 0 1 0 2.2-5.3" /><path d="M4 4.5v3.7h3.7" /></svg>
+          <span class="runner-hint">space / tap</span>
         </div>
       </div>
     </section>
@@ -116,7 +148,7 @@ const year = new Date().getFullYear();
     <section class="section" aria-labelledby="else-h">
       <h2 id="else-h"><span aria-hidden="true">*</span> elsewhere</h2>
       <p class="about">
-        Looking for the serious version? That's at <a href="/">rrreksa.com</a>, with the CV.
+        Looking for the serious version? That's at <a href="/">rrreksa.com</a>, with the <a href="/#cv">CV</a>.
       </p>
     </section>
   </main>
@@ -130,8 +162,10 @@ const year = new Date().getFullYear();
 <script>
   import { mountDither } from "../scripts/dither";
   import { mountRunner } from "../scripts/runner";
+  import { mountHighlight } from "../scripts/highlight";
 
   mountDither();
+  document.querySelectorAll<HTMLCanvasElement>("[data-highlight]").forEach(mountHighlight);
   const game = document.querySelector<HTMLElement>("[data-runner]");
   if (game) mountRunner(game);
 </script>
