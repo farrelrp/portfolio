@@ -47,7 +47,7 @@ const year = new Date().getFullYear();
           <span class="name-main">{profile.middle}</span>
           <span class="name-side">{profile.last}</span>
         </h1>
-        <p class="lede">{profile.tagline}</p>
+        <p class="lede">{profile.tagline.map((line) => <span class="lede-line">{line}</span>)}</p>
         <div class="actions">
           <button type="button" class="cta" data-action="cv">view as cv</button>
           <nav class="links" aria-label="Links">

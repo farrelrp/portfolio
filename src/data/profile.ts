@@ -4,7 +4,10 @@ export const profile = {
   name: "Farrel Reksa Prawira",
   short: "reksa",
   role: "ai & product",
-  tagline: "Forward Deployed Engineer Apprentice at Shopee. Co-founder of Tofly.",
+  tagline: [
+    "Forward Deployed Engineer Apprentice at Shopee.",
+    "Also, building Tofly as a Product Engineer.",
+  ],
   about:
     "I'm a final-year Information Systems student at Universitas Indonesia, working on AI products from prototype to launch. Right now I'm building Tofly and joining Shopee as a Forward Deployed Engineer Apprentice. Before this, I spent half a year on cloud and GPU products at Indosat and two years leading software builds at RISTEK.",
   first: "Farrel",

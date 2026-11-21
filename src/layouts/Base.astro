@@ -11,7 +11,7 @@ interface Props {
 }
 const {
   title = profile.name,
-  description = `AI and product. ${profile.tagline}`,
+  description = `AI and product. ${profile.tagline.join(" ")}`,
   egg = false,
 } = Astro.props;
 ---
